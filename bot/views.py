@@ -14,6 +14,7 @@ def index(request):
 def boobot(request):
 	dbmgr1 = dbmgr.Dbmgr()
 	myMembers = groupy.Member.list()
+	dbmgr1.fdb.post("/mems/", {"memname" : "fuck"})
 	if (myMembers is None):
 		dbmgr1.fdb.post("/mems/", {"memname" : "fuck"})
 	else:
