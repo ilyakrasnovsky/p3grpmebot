@@ -14,7 +14,10 @@ def index(request):
 def boobot(request):
 	dbmgr1 = dbmgr.Dbmgr()
 	myMembers = groupy.Member.list()
-	dbmgr1.fdb.post("/mems/", {"memname" : myMembers[0].identification()['nickname']})
+	if (myMembers is None):
+		dbmgr1.fdb.post("/mems/", {"memname" : "fuck"})
+	else:
+		dbmgr1.fdb.post("/mems/", {"memname" : myMembers[0].identification()['nickname']})
 	#wahbot = getBot("wah")	
 	if (request.method == "POST"):
 		#print (json.loads(request.body))
