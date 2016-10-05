@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . import dbmgr
 import json
 import groupy
+import sys
 
 def index(request):
 	return render(request, 'bot/home.html')
@@ -15,6 +16,7 @@ def boobot(request):
 	dbmgr1 = dbmgr.Dbmgr()
 	myMembers = groupy.Member.list()
 	print ("what the actual fuck")
+	sys.stdout.flush()
 	dbmgr1.fdb.post("/mems/", {"memname" : "fuck"})
 	if (myMembers is None):
 		dbmgr1.fdb.post("/mems/", {"memname" : "fuck"})
