@@ -13,6 +13,7 @@ def index(request):
 @csrf_exempt
 def boobot(request):
 	dbmgr1 = dbmgr.Dbmgr()
+	#wahbot = getBot("wah")	
 	if (request.method == "POST"):
 		#print (json.loads(request.body))
 		json_str = ((request.body).decode('utf-8'))
@@ -22,6 +23,15 @@ def boobot(request):
 		#dbmgr1.fdb.post("/lewl/", request.POST.dict())
 		dbmgr1.addMessage(jsondata['name'], jsondata['text'])
 	return render(request, 'bot/home.html')
+
+
+'''
+def getBot(botname):
+	for mybot in groupy.Bot.list():
+		if (mybot.name == botname):
+			print ("found bot!")
+			return mybot
+'''
 
 '''
 class: Bot
