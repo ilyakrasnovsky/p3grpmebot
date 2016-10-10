@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('bot.urls')),
 ]
+
+#write groupy key to app HOME directory sp groupy API can find it 
+with open ('.groupy.key', 'w') as groupy_key:
+	groupy_key.write(settings.GROUPMEBOT_GROUPME_SECRET_KEY)
