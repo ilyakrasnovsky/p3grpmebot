@@ -13,16 +13,14 @@ def index(request):
 
 @csrf_exempt
 def boobot(request):
-	print ("what the actual fuck")
-	sys.stdout.flush()
 	dbmgr1 = dbmgr.Dbmgr()
-	myMembers = groupy.Member.list()
-	dbmgr1.fdb.post("/mems/", {"memname" : "fuck"})
+	'''
 	if (myMembers is None):
 		dbmgr1.fdb.post("/mems/", {"memname" : "fuck"})
 	else:
 		dbmgr1.fdb.post("/mems/", {"memname" : myMembers[0].identification()['nickname']})
 	#wahbot = getBot("wah")	
+	'''
 	if (request.method == "POST"):
 		#print (json.loads(request.body))
 		json_str = ((request.body).decode('utf-8'))
@@ -30,8 +28,12 @@ def boobot(request):
 		#print (request.body)
 		#print (request.POST.dict())
 		#dbmgr1.fdb.post("/lewl/", request.POST.dict())
-		if ('name' in jsondata and 'text' in jsondata):
-			dbmgr1.addMessage(jsondata['name'], jsondata['text'])
+		#if ('name' in jsondata and 'text' in jsondata):
+		#	dbmgr1.addMessage(jsondata['name'], jsondata['text'])
+		myMembers = groupy.Member.list()
+		print (myMembers[0].identification()['nickname'])
+		print (groupy.config.KEY_LOCATION)
+		
 	return render(request, 'bot/home.html')
 
 
