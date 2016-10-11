@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 #from django.views import View
 #from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
-from . import dbmgr
+from . import dbmgr #, behavior
 import json
 import groupy
 
@@ -12,37 +12,34 @@ def index(request):
 
 @csrf_exempt
 def boobot(request):
-	dbmgr1 = dbmgr.Dbmgr()
-	'''
-	if (myMembers is None):
-		dbmgr1.fdb.post("/mems/", {"memname" : "fuck"})
-	else:
-		dbmgr1.fdb.post("/mems/", {"memname" : myMembers[0].identification()['nickname']})
-	#wahbot = getBot("wah")	
-	'''
+	#only perform logic if the request was a post
 	if (request.method == "POST"):
-		#print (json.loads(request.body))
+		#parse out HTTP POST request from groupme as json
 		json_str = ((request.body).decode('utf-8'))
 		jsondata = json.loads(json_str)
-		#print (request.body)
-		#print (request.POST.dict())
-		#dbmgr1.fdb.post("/lewl/", request.POST.dict())
-		#if ('name' in jsondata and 'text' in jsondata):
-		#	dbmgr1.addMessage(jsondata['name'], jsondata['text'])
-		print("please?")
-		myMembers = groupy.Member.list()
-		dbmgr1.fdb.post("/mems/", {"memname" : myMembers[0].identification()['nickname']})
-		print ("thanks!")
+		
+		#make sure incoming data is not corrupted
+		if ('name' in jsondata):
+			#if the real bot victim changes their name, have the
+			#bot adapt
+			if (jsondata['name'] != "GroupMe"):
+				pass
+
+			#make sure the POSTer was not a bot or the
+			#intended victim, or groupMe admin
+			if (jsondata['name'] != "Haiti Badding Sr " and 
+				jsondata['name'] != "Haiti Badding Sr" and
+				jsondata['name'] != "GroupMe"):
+				#get relevant bots using groupy API
+				hannah_bot = behavior.getBot("Haiti Badding Sr ")
+				if (hannah_bot is not None):
+					hannah_bot.post("Hi! I'm Hannah!")
+				
+		#Save the post to my database
+		dbmgr1 = dbmgr.Dbmgr()
+		dbmgr1.fdb.post("/data/", jsondata)
+		
 	return render(request, 'bot/home.html')
-
-
-'''
-def getBot(botname):
-	for mybot in groupy.Bot.list():
-		if (mybot.name == botname):
-			print ("found bot!")
-			return mybot
-'''
 
 '''
 class: Bot
