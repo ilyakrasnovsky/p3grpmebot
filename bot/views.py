@@ -6,7 +6,6 @@ from django.views.decorators.csrf import csrf_exempt
 from . import dbmgr
 import json
 import groupy
-import sys
 
 def index(request):
 	return render(request, 'bot/home.html')
