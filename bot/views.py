@@ -30,8 +30,10 @@ def boobot(request):
 		#dbmgr1.fdb.post("/lewl/", request.POST.dict())
 		#if ('name' in jsondata and 'text' in jsondata):
 		#	dbmgr1.addMessage(jsondata['name'], jsondata['text'])
+		print("please?")
 		myMembers = groupy.Member.list()
 		dbmgr1.fdb.post("/mems/", {"memname" : myMembers[0].identification()['nickname']})
+		print ("thanks!")
 	return render(request, 'bot/home.html')
 
 
