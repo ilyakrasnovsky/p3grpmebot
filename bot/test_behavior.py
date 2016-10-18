@@ -1,34 +1,41 @@
 from django.test import TestCase
-from bot import behavior
+from bot.behavior import Behavior
 
 class TestBehavior(TestCase):
+	def setUp(self):
+		pass
+
 	def test_000_meMyselfAndI(self):
 		#groupyAPI is working
-		self.assertEqual(str(behavior.meMyselfAndI()), 'Ilya Krasnovsky')
+		myBehavior = Behavior()
+		self.assertEqual(str(myBehavior.meMyselfAndI()), 'Ilya Krasnovsky')
 
 	def test_001_getBot(self):
+		myBehavior = Behavior()
 		#bot hit
-		self.assertEqual(str(behavior.getBot("Dorothy Tang ").bot_id), '000ccdb6b4bd1320e186cdc10f')
+		self.assertEqual(str(myBehavior.getBot("Dorothy Tang ").bot_id), '000ccdb6b4bd1320e186cdc10f')
 		#bot miss
-		self.assertIsNone(behavior.getBot("Fister Roboto"))
+		self.assertIsNone(myBehavior.getBot("Fister Roboto"))
 
 	def test_002_getGroup(self):
+		myBehavior = Behavior()
 		#group hit
-		self.assertEqual(str(behavior.getGroup("boo").group_id), '25434001')
+		self.assertEqual(str(myBehavior.getGroup("boo").group_id), '25434001')
 		#group miss
-		self.assertIsNone(behavior.getGroup("wah"))
+		self.assertIsNone(myBehavior.getGroup("wah"))
 
 	def test_003_getVictimFromGroup(self):
+		myBehavior = Behavior()
 		#member and group hit
-		self.assertEqual(str(behavior.getVictimFromGroup("Dorothy Tang", "boo").identification()['nickname']), 'Dorothy Tang')
+		self.assertEqual(str(myBehavior.getVictimFromGroup("Dorothy Tang", "boo").identification()['nickname']), 'Dorothy Tang')
 		#member miss
-		self.assertIsNone(behavior.getVictimFromGroup("Ilya", "Tests"))
+		self.assertIsNone(myBehavior.getVictimFromGroup("Ilya", "Tests"))
 		#group miss
-		self.assertIsNone(behavior.getVictimFromGroup("Ilya Krasnovsky", "wah"))
+		self.assertIsNone(myBehavior.getVictimFromGroup("Ilya Krasnovsky", "wah"))
 		
 		#bot member and group hit, exclude bot
-		self.assertIsNone(behavior.getVictimFromGroup("Dorothy Tang ", "boo"))
+		self.assertIsNone(myBehavior.getVictimFromGroup("Dorothy Tang ", "boo"))
 		#bot member miss
-		self.assertIsNone(behavior.getVictimFromGroup("Fister Roboto", "boo"))
+		self.assertIsNone(myBehavior.getVictimFromGroup("Fister Roboto", "boo"))
 		#group miss with bot
-		self.assertIsNone(behavior.getVictimFromGroup("Haiti Badding Sr ", "wah"))
+		self.assertIsNone(myBehavior.getVictimFromGroup("Haiti Badding Sr ", "wah"))

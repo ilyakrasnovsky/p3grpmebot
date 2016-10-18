@@ -9,59 +9,63 @@ import groupy
 #from bot import dbmgr
 #import dbmgr
 
-#get information about myself
-def meMyselfAndI():
-	return groupy.User.get()
+class Behavior():
+	def __init__(self):
+		pass
 
-#get an existing bot by name (string)
-#returns Bot instance (groupy API) if found,
-#None if not
-def getBot(botname):
-	for mybot in groupy.Bot.list():
-		if (mybot.name == botname):
-			return mybot
-	return None
+	#get information about myself
+	def meMyselfAndI(self):
+		return groupy.User.get()
 
-#make a bot to haunt victimName (string) in groupName (string)
-#with avatar_url (groupMe URL as string) and callback_url
-#returns True if successful, False if not
-def botAssimilate(victimName, groupName, avatar_url, callback_url):
-	if (getVictimFromGroup(victimName, groupName) is not None):
-		try:
-			groupy.Bot.create(victimName + " ", 
-							  getGroup(groupName),
-							  avatar_url,
-							  callback_url)
-			return True
-		except groupy.api.errors.ApiError:
-			return False
-	return False
+	#get an existing bot by name (string)
+	#returns Bot instance (groupy API) if found,
+	#None if not
+	def getBot(self, botname):
+		for mybot in groupy.Bot.list():
+			if (mybot.name == botname):
+				return mybot
+		return None
 
-#destroy the bot given by botname (string), if it exists
-def destroyBot(botname):
-	bot_to_destroy = getBot(botname)
-	if (bot_to_destroy is not None):
-		bot_to_destroy.destroy()
+	#make a bot to haunt victimName (string) in groupName (string)
+	#with avatar_url (groupMe URL as string) and callback_url
+	#returns True if successful, False if not
+	def botAssimilate(self, victimName, groupName, avatar_url, callback_url):
+		if (self.getVictimFromGroup(victimName, groupName) is not None):
+			try:
+				groupy.Bot.create(victimName + " ", 
+								  getGroup(groupName),
+								  avatar_url,
+								  callback_url)
+				return True
+			except groupy.api.errors.ApiError:
+				return False
+		return False
 
-#get an existing group by name (string)
-#returns Group instance (groupy API) if found,
-#None if not
-def getGroup(groupName):
-	for group in groupy.Group.list(): 
-		if(group.name == groupName):
-			return group
-	return None
+	#destroy the bot given by botname (string), if it exists
+	def destroyBot(self, botname):
+		bot_to_destroy = self.getBot(botname)
+		if (bot_to_destroy is not None):
+			bot_to_destroy.destroy()
 
-#Finds a victim whose name is victimName(string)
-#in the groupme group given by groupName. returns
-#Member instance (groupy API) if found, None if not
-def getVictimFromGroup(victimName, groupName):
-	group = getGroup(groupName)
-	if (group is not None):
-		for mem in group.members():
-			if (mem.identification()['nickname'] == victimName):
-				return mem
-	return None
+	#get an existing group by name (string)
+	#returns Group instance (groupy API) if found,
+	#None if not
+	def getGroup(self, groupName):
+		for group in groupy.Group.list(): 
+			if(group.name == groupName):
+				return group
+		return None
+
+	#Finds a victim whose name is victimName(string)
+	#in the groupme group given by groupName. returns
+	#Member instance (groupy API) if found, None if not
+	def getVictimFromGroup(self, victimName, groupName):
+		group = self.getGroup(groupName)
+		if (group is not None):
+			for mem in group.members():
+				if (mem.identification()['nickname'] == victimName):
+					return mem
+		return None
 
 #Tester client
 def main():
