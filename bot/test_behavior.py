@@ -1,27 +1,24 @@
 from django.test import TestCase
 from bot import behavior
 
-class meMyselfAndITestCase(TestCase):
-	def test_meMyselfAndI(self):
+class TestBehavior(TestCase):
+	def test_000_meMyselfAndI(self):
 		#groupyAPI is working
 		self.assertEqual(str(behavior.meMyselfAndI()), 'Ilya Krasnovsky')
 
-class getBotTestCase(TestCase):
-	def test_getBot(self):
+	def test_001_getBot(self):
 		#bot hit
 		self.assertEqual(str(behavior.getBot("Dorothy Tang ").bot_id), '000ccdb6b4bd1320e186cdc10f')
 		#bot miss
 		self.assertIsNone(behavior.getBot("Fister Roboto"))
 
-class getGroupTestCase(TestCase):
-	def test_getGroup(self):
+	def test_002_getGroup(self):
 		#group hit
 		self.assertEqual(str(behavior.getGroup("boo").group_id), '25434001')
 		#group miss
 		self.assertIsNone(behavior.getGroup("wah"))
 
-class getVictimFromGroupTestCase(TestCase):
-	def test_getVictimFromGroup(self):
+	def test_003_getVictimFromGroup(self):
 		#member and group hit
 		self.assertEqual(str(behavior.getVictimFromGroup("Dorothy Tang", "boo").identification()['nickname']), 'Dorothy Tang')
 		#member miss
