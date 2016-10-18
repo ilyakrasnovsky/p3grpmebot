@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 #from django.views import View
 #from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
-from . import dbmgr #, behavior
+from bot import dbmgr #, behavior
 import json
 import groupy
 
@@ -22,7 +22,7 @@ def boobot(request):
 		if ('name' in jsondata):
 			#if the real bot victim changes their name, have the
 			#bot adapt
-			if (jsondata['name'] != "GroupMe"):
+			if (jsondata['name'] == "GroupMe"):
 				pass
 
 			#make sure the POSTer was not a bot or the
@@ -36,8 +36,8 @@ def boobot(request):
 					hannah_bot.post("Hi! I'm Hannah!")
 				
 		#Save the post to my database
-		dbmgr1 = dbmgr.Dbmgr()
-		dbmgr1.fdb.post("/data/", jsondata)
+		#dbmgr1 = dbmgr.Dbmgr()
+		#dbmgr1.fdb.post("/data/", jsondata)
 		
 	return render(request, 'bot/home.html')
 

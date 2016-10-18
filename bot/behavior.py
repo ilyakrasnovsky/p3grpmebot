@@ -6,7 +6,7 @@ has common/helpful bot behavior routines
 '''
 
 import groupy
-from . import dbmgr
+#from bot import dbmgr
 #import dbmgr
 
 #get information about myself
