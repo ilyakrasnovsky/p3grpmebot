@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 
+
 #inherits from Model
 #id field generated automatically, basically like SQL
 class groupMeBot(models.Model):
@@ -12,7 +13,7 @@ class groupMeBot(models.Model):
 	#__str__ for python 3, __unicode__ for python 2
 	def __str__(self):
 		return self.title
-
+'''
 class groupMeMember(models.Model):
 	title = models.CharField(max_length=140) #shorter than textfield 
 	body = models.TextField()
@@ -27,3 +28,4 @@ class groupMeGroup(models.Model):
 	
 	def __str__(self):
 		return self.title
+'''
