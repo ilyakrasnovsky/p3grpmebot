@@ -11,7 +11,7 @@ class groupMeBot(models.Model):
 
 	#__str__ for python 3, __unicode__ for python 2
 	def __str__(self):
-		return self.title
+		return self.name
 '''
 class groupMeMember(models.Model):
 	title = models.CharField(max_length=140) #shorter than textfield 
