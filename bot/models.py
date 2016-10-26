@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
 
-
 #inherits from Model
 #id field generated automatically, basically like SQL
 class groupMeBot(models.Model):
