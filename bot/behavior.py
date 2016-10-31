@@ -33,7 +33,7 @@ class Behavior():
 		if (self.getVictimFromGroup(victimName, groupName) is not None):
 			try:
 				groupy.Bot.create(victimName + " ", 
-								  getGroup(groupName),
+								  self.getGroup(groupName),
 								  avatar_url,
 								  callback_url)
 				return True

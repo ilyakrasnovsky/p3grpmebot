@@ -40,8 +40,13 @@ class TestBehavior(TestCase):
 		#group miss with bot
 		self.assertIsNone(myBehavior.getVictimFromGroup("Haiti Badding Sr ", "wah"))
 
+	def test004_botAssimilate(self):
+		myBehavior = Behavior()
+		#make a bot in Tests to haunt user "Ilya Krasnovsky"
+		self.assertTrue(True)
+
 	'''
-	def test_004_destroyBot(self):
+	def test_005_destroyBot(self):
 		myBehavior = Behavior()
 		destroyMe = myBehavior.getBot("Dorothy Tang")
 		myBehavior.destroyBot()
