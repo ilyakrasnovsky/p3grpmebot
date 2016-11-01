@@ -12,13 +12,15 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import dj_database_url
 from . import localcreds
+import psycopg2
+from urllib import parse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 #DEPLOYMENT MODE : toggle LOCAL or REMOTE
-DEPLOY = os.environ.get('DEPLOYMENT_MODE')
+DEPLOY = os.environ.get('P3GRPMEBOT_DEPLOYMENT_MODE')
 
 #Secret keys for heroku (deploy must be LOCAL or REMOTE)
 def SECRET_KEYS(deploy):
@@ -127,10 +129,23 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Update database configuration with $DATABASE_URL.
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
+if (DEPLOY == "REMOTE"):
+    # Update database configuration with $DATABASE_URL.
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
+elif (DEPLOY == "LOCAL"):
+    parse.uses_netloc.append("postgres")
+    url = parse.urlparse(os.environ["P3GRPMEBOT_LOCAL_DATABASE_URL"])
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+else:
+    print("BAD DEPLOYMENT CONDITION!")
+    assert(False)
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
