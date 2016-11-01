@@ -5,7 +5,9 @@ from django.db import models
 #id field generated automatically, basically like SQL
 class groupMeBot(models.Model):
 	botid = models.TextField(unique=True)
-	name = models.TextField(unique=True) #shorter than textfield 
+	name = models.TextField(unique=True) #shorter than textfield
+	callback_url = models.URLField()
+	avatar_url = models.URLField()
 
 	#__str__ for python 3, __unicode__ for python 2
 	def __str__(self):

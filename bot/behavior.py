@@ -6,8 +6,7 @@ has common/helpful bot behavior routines
 '''
 
 import groupy
-#from bot import dbmgr
-#import dbmgr
+from bot import dbmgr
 
 class Behavior():
 	def __init__(self):

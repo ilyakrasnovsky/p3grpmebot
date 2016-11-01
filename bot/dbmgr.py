@@ -8,8 +8,43 @@ features firebase wrapper class called Dbmgr
 from firebase import firebase
 from requests import HTTPError
 from django.conf import settings
+from bot.models import groupMeBot
 
-#import localcreds
+'''
+class: PDbmgr
+
+description:
+    - Postgres database manager class
+
+attributes:
+
+initializer input:
+    None
+
+functions:
+    addBot()
+    getBot()
+    removeBot()
+'''
+class PDbmgr():
+    def __init__(self):
+        pass
+
+    def getBot(self, botname):
+        try:
+            bot = groupMeBot.objects.get(name=botname)
+            return bot
+        except groupMeBot.DoesNotExist:
+            return None
+
+    def addBot(self, botname, botid, callback_URL, ):
+        #if (True):
+        pass
+
+    def removeBot():
+        pass
+
+
 
 '''
 class: Dbmgr
@@ -36,10 +71,8 @@ functions:
 class Dbmgr():
     def __init__(self):
         #Authentication 
-        FIREBASE_URL = settings.FIREBASE_URL # 
-        FIREBASE_KEY = settings.GROUPMEBOT_FIREBASE_SECRET_KEY #localcreds.get_credentials(firebase=True) 
-        #FIREBASE_URL = "https://groupmebot-4104f.firebaseio.com/" 
-        #FIREBASE_KEY = localcreds.get_credentials(firebase=True) 
+        FIREBASE_URL = settings.FIREBASE_URL
+        FIREBASE_KEY = settings.GROUPMEBOT_FIREBASE_SECRET_KEY  
         
         authentication = firebase.FirebaseAuthentication(FIREBASE_KEY, 'ilyakrasnovsky@gmail.com', admin = True)
         self.fdb = firebase.FirebaseApplication(FIREBASE_URL, authentication=authentication)
