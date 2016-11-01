@@ -13,7 +13,6 @@ import os
 import dj_database_url
 from . import localcreds
 import psycopg2
-from urllib import parse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,18 +24,21 @@ DEPLOY = os.environ.get('P3GRPMEBOT_DEPLOYMENT_MODE')
 #Secret keys for heroku (deploy must be LOCAL or REMOTE)
 def SECRET_KEYS(deploy):
     if (deploy == 'LOCAL'):
-        return (localcreds.get_credentials(), 
+        return (localcreds.get_credentials(django=True), 
                 localcreds.get_credentials(firebase=True),
-                localcreds.get_credentials(groupme=True))
+                localcreds.get_credentials(groupme=True),
+                localcreds.get_credentials(postgres=True))
     elif (deploy == 'REMOTE'):
         return (os.environ.get('GROUPMEBOT_DJANGO_SECRET_KEY'), 
                 os.environ.get('GROUPMEBOT_FIREBASE_SECRET_KEY'),
-                os.environ.get('GROUPMEBOT_GROUPME_SECRET_KEY')) 
+                os.environ.get('GROUPMEBOT_GROUPME_SECRET_KEY'),
+                os.environ.get('GROUPMEBOT_POSTGRES_SECRET_KEY')
+                ) 
     else:
         print ('BAD DEPLOMENT CONDITION!')
         assert(False)
 
-(SECRET_KEY, GROUPMEBOT_FIREBASE_SECRET_KEY, GROUPMEBOT_GROUPME_SECRET_KEY) = SECRET_KEYS(DEPLOY)
+(SECRET_KEY, GROUPMEBOT_FIREBASE_SECRET_KEY, GROUPMEBOT_GROUPME_SECRET_KEY, GROUPMEBOT_POSTGRES_SECRET_KEY) = SECRET_KEYS(DEPLOY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if (DEPLOY == 'LOCAL'):
@@ -45,7 +47,6 @@ else:
     DEBUG = False
 
 FIREBASE_URL = "https://groupmebot-4104f.firebaseio.com/"
-GROUPME_URL = ""
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -134,15 +135,16 @@ if (DEPLOY == "REMOTE"):
     db_from_env = dj_database_url.config(conn_max_age=500)
     DATABASES['default'].update(db_from_env)
 elif (DEPLOY == "LOCAL"):
-    parse.uses_netloc.append("postgres")
-    url = parse.urlparse(os.environ["P3GRPMEBOT_LOCAL_DATABASE_URL"])
-    conn = psycopg2.connect(
-        database=url.path[1:],
-        user=url.username,
-        password=url.password,
-        host=url.hostname,
-        port=url.port
-    )
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'local_p3grpmebot',
+            'USER': 'ilya',
+            'PASSWORD': GROUPMEBOT_POSTGRES_SECRET_KEY,
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 else:
     print("BAD DEPLOYMENT CONDITION!")
     assert(False)
