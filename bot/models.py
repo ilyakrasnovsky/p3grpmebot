@@ -6,8 +6,6 @@ from django.db import models
 class groupMeBot(models.Model):
 	botid = models.TextField(unique=True)
 	name = models.TextField(unique=True) #shorter than textfield 
-	body = models.TextField()
-	date = models.DateTimeField()
 
 	#__str__ for python 3, __unicode__ for python 2
 	def __str__(self):
