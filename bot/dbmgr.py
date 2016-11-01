@@ -37,7 +37,7 @@ class PDbmgr():
         except groupMeBot.DoesNotExist:
             return None
 
-    def addBot(self, botname, botid, callback_URL, ):
+    def addBot(self, botname, botid, callback_URL, avatar_URL):
         #if (True):
         pass
 
