@@ -23,23 +23,38 @@ initializer input:
 
 functions:
     addBot()
-    getBot()
+    getBotByName()
+    getBotByID()
     removeBot()
 '''
 class PDbmgr():
     def __init__(self):
         pass
 
-    def getBot(self, botname):
+    def getBotByName(self, botname):
         try:
             bot = groupMeBot.objects.get(name=botname)
             return bot
         except groupMeBot.DoesNotExist:
             return None
 
-    def addBot(self, botname, botid, callback_URL, avatar_URL):
-        #if (True):
-        pass
+    def getBotByID(self, botid):
+        try:
+            bot = groupMeBot.objects.get(botid=botid)
+            return bot
+        except groupMeBot.DoesNotExist:
+            return None
+
+    def addBot(self, botname, botid, avatar_URL, callback_URL):
+        if (self.getBotByName(botname) is not None and
+            self.getBotByID(botid) is not None):
+            bot = groupMeBot(name = botname,
+                            botid = botid,
+                            avatar_url = avatar_URL,
+                            callback_url = callback_URL)
+            bot.save()
+            return True
+        return False
 
     def removeBot():
         pass
