@@ -46,8 +46,11 @@ class PDbmgr():
             return None
 
     def addBot(self, botname, botid, avatar_URL, callback_URL):
-        if (self.getBotByName(botname) is not None and
-            self.getBotByID(botid) is not None):
+        try:
+            bot_by_name = groupMeBot.objects.get(name=botname)
+            bot_by_id = groupMeBot.objects.get(botid=botid)
+            return False
+        except groupMeBot.DoesNotExist:    
             bot = groupMeBot(name = botname,
                             botid = botid,
                             avatar_url = avatar_URL,

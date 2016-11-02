@@ -6,8 +6,8 @@ from django.db import models
 class groupMeBot(models.Model):
 	botid = models.TextField(unique=True)
 	name = models.TextField(unique=True) #shorter than textfield
-	callback_url = models.URLField()
-	avatar_url = models.URLField()
+	callback_url = models.URLField(default="fake_url")
+	avatar_url = models.URLField(default="fake_url")
 
 	#__str__ for python 3, __unicode__ for python 2
 	def __str__(self):
