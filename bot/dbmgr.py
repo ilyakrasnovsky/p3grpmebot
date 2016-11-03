@@ -8,6 +8,7 @@ features firebase wrapper class called Dbmgr
 from firebase import firebase
 from requests import HTTPError
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from bot.models import groupMeBot
 
 '''
@@ -46,18 +47,16 @@ class PDbmgr():
             return None
 
     def addBot(self, botname, botid, avatar_URL, callback_URL):
-        try:
-            bot_by_name = groupMeBot.objects.get(name=botname)
-            bot_by_id = groupMeBot.objects.get(botid=botid)
-            return False
-        except groupMeBot.DoesNotExist:    
+        try:    
             bot = groupMeBot(name = botname,
                             botid = botid,
                             avatar_url = avatar_URL,
                             callback_url = callback_URL)
+            bot.full_clean()
             bot.save()
             return True
-        return False
+        except ValidationError:
+            return False
 
     def removeBot():
         pass
