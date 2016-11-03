@@ -8,60 +8,6 @@ features firebase wrapper class called Dbmgr
 from firebase import firebase
 from requests import HTTPError
 from django.conf import settings
-from django.core.exceptions import ValidationError
-from bot.models import groupMeBot
-
-'''
-class: PDbmgr
-
-description:
-    - Postgres database manager class
-
-attributes:
-
-initializer input:
-    None
-
-functions:
-    addBot()
-    getBotByName()
-    getBotByID()
-    removeBot()
-'''
-class PDbmgr():
-    def __init__(self):
-        pass
-
-    def getBotByName(self, botname):
-        try:
-            bot = groupMeBot.objects.get(name=botname)
-            return bot
-        except groupMeBot.DoesNotExist:
-            return None
-
-    def getBotByID(self, botid):
-        try:
-            bot = groupMeBot.objects.get(botid=botid)
-            return bot
-        except groupMeBot.DoesNotExist:
-            return None
-
-    def addBot(self, botname, botid, avatar_URL, callback_URL):
-        try:    
-            bot = groupMeBot(name = botname,
-                            botid = botid,
-                            avatar_url = avatar_URL,
-                            callback_url = callback_URL)
-            bot.full_clean()
-            bot.save()
-            return True
-        except ValidationError:
-            return False
-
-    def removeBot():
-        pass
-
-
 
 '''
 class: Dbmgr

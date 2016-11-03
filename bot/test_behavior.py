@@ -10,6 +10,11 @@ class TestBehavior(TestCase):
 		myBehavior = Behavior()
 		self.assertEqual(str(myBehavior.meMyselfAndI()), 'Ilya Krasnovsky')
 
+	def test_001_addBot(self):
+		myBehavior = Behavior()
+		#success on name
+		self.assertTrue(myBehavior.addBot("Dorothy Tang ", "Tests"))
+
 	def test_001_getBot(self):
 		myBehavior = Behavior()
 		#bot hit
@@ -46,7 +51,7 @@ class TestBehavior(TestCase):
 		#make a bot in Tests to haunt user "Ilya Krasnovsky"
 		self.assertTrue(True)
 	'''
-	
+
 	'''
 	def test_005_destroyBot(self):
 		myBehavior = Behavior()

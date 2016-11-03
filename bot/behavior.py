@@ -10,7 +10,7 @@ from bot import dbmgr
 
 class Behavior():
 	def __init__(self):
-		pass
+		self.pdbmgr = dbmgr.PDbmgr()
 
 	#get information about myself
 	def meMyselfAndI(self):
@@ -35,6 +35,21 @@ class Behavior():
 								  self.getGroup(groupName),
 								  avatar_url,
 								  callback_url)
+				return True
+			except groupy.api.errors.ApiError:
+				return False
+		return False
+
+	def addBot(self, botname, groupName, avatar_url, callback_url):
+		if (self.pdbmgr.getBotByName(botname) is None):
+			try:
+				newbot = groupy.Bot.create(botname, 
+								  groupName,
+								  avatar_url,
+								  callback_url)
+				if (self.pdbmgr.addBot(newbot.name, newbot.bot_id, newbot.avatar_url, newbot.callback_url) == False):
+					newbot.destroy()
+					return False
 				return True
 			except groupy.api.errors.ApiError:
 				return False
