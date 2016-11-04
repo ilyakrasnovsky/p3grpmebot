@@ -32,14 +32,8 @@ class Behavior():
 	#returns True if successful, False if not
 	def botAssimilate(self, victimName, groupName, avatar_url, callback_url):
 		if (self.getVictimFromGroup(victimName, groupName) is not None):
-			try:
-				groupy.Bot.create(victimName + " ", 
-								  self.getGroup(groupName),
-								  avatar_url,
-								  callback_url)
+			if (self.addBot(victimName + " ", groupName, avatar_url, callback_url)):
 				return True
-			except groupy.api.errors.ApiError:
-				return False
 		return False
 
 	def addBot(self, botname, groupName, avatar_url, callback_url):
@@ -92,78 +86,7 @@ class Behavior():
 
 #Tester client
 def main():
-	print (meMyselfAndI())
+	pass
 	
-	if (getBot("Dorothy Tang ") is not None):
-		print (getBot("Dorothy Tang ").bot_id)
-	else:
-		print ("Dorothy Tang is not a bot")
-
-	if (getBot("Fister Roboto") is not None):
-		print (getBot("Fister Roboto").bot_id)
-	else:
-		print ("Fister Roboto is not a bot")
-	
-	if (getGroup("boo") is not None):
-		print (getGroup("boo").group_id)
-	else:
-		print ("boo is not a group")
-
-	if (getGroup("wah") is not None):
-		print (getGroup("wah").group_id)
-	else:
-		print ("wah is not a group")
-
-	if (getVictimFromGroup("Dorothy Tang", "boo") is not None):
-		print (getVictimFromGroup("Dorothy Tang", "boo").identification()['nickname'])
-	else:
-		print ("Dorothy Tang is not in group boo, or group boo doesn't exist")
-
-	if (getVictimFromGroup("Haiti Badding Sr ", "Tests") is not None):
-		print (getVictimFromGroup("Haiti Badding Sr ", "Tests").identification()['nickname'])
-	else:
-		print ("Haiti Badding Sr is not in group Tests, or group Tests doesn't exist")
-
-	if (getVictimFromGroup("Ilya", "Tests") is not None):
-		print (getVictimFromGroup("Ilya", "Tests").identification()['nickname'])
-	else:
-		print ("Ilya is not in group Tests, or group Tests doesn't exist")
-
-	if (getVictimFromGroup("Ilya Krasnovsky", "Tests") is not None):
-		print (getVictimFromGroup("Ilya Krasnovsky", "Tests").identification()['nickname'])
-	else:
-		print ("Ilya Krasnovsky is not in group Tests, or group Tests doesn't exist")
-
-	if (getVictimFromGroup("Dorothy Tang", "Tests") is not None):
-		print (getVictimFromGroup("Dorothy Tang", "Tests").identification()['nickname'])
-	else:
-		print ("Dorothy Tang is not in group Tests, or group Tests doesn't exist")
-
-	if (botAssimilate("Dorothy", "Tests", None, None)):
-		print ("Created Dorothy bot in group Tests")
-	else:
-		print ("Failed to create Dorothy bot in group Tests")
-
-	if (botAssimilate("Dorothy Tang", "boo", None, "https://ilyasgroupmebot.herokuapp.com/boobot0")):
-		print ("Created Dorothy Tang bot in group boo")
-	else:
-		print ("Failed to create Dorothy Tang bot in group boo")
-
-	if (botAssimilate("Ilya Krasnovsky", "boo", None, "https://ilyasgroupmebot.herokuapp.com/boobot1")):
-		print ("Created Ilya Krasnovsky bot in group boo")
-	else:
-		print ("Failed to create Ilya Krasnovsky bot in group boo")
-
-	if (botAssimilate("Ilya Krasnovsky", "boo", None, "https://ilyasgroupmebot.herokuapp.com/boobot2")):
-		print ("Created Ilya Krasnovsky bot in group boo")
-	else:
-		print ("Failed to create Ilya Krasnovsky bot in group boo")
-
-	if (botAssimilate("Ilya Krasnovsky", "Tests", None, None)):
-		print ("Created Ilya Krasnovsky bot in group Tests")
-	else:
-		print ("Failed to create Ilya Krasnovsky bot in group Tests")
-
-
 if __name__ == '__main__':
     main()
