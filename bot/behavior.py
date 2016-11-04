@@ -6,11 +6,11 @@ has common/helpful bot behavior routines
 '''
 
 import groupy
-from bot import dbmgr
+from bot.models import groupMeBot
 
 class Behavior():
 	def __init__(self):
-		self.pdbmgr = dbmgr.PDbmgr()
+		pass
 
 	#get information about myself
 	def meMyselfAndI(self):
@@ -20,9 +20,11 @@ class Behavior():
 	#returns Bot instance (groupy API) if found,
 	#None if not
 	def getBot(self, botname):
-		for mybot in groupy.Bot.list():
-			if (mybot.name == botname):
-				return mybot
+		modelbot = groupMeBot.botmanager.getBotByName(botname)
+		if (modelbot is not None):
+			for mybot in groupy.Bot.list():
+				if (mybot.name == botname):
+					return mybot
 		return None
 
 	#make a bot to haunt victimName (string) in groupName (string)
@@ -41,13 +43,17 @@ class Behavior():
 		return False
 
 	def addBot(self, botname, groupName, avatar_url, callback_url):
-		if (self.pdbmgr.getBotByName(botname) is None):
+		if (groupMeBot.botmanager.getBotByName(botname) is None):
 			try:
 				newbot = groupy.Bot.create(botname, 
-								  groupName,
+								  self.getGroup(groupName),
 								  avatar_url,
 								  callback_url)
-				if (self.pdbmgr.addBot(newbot.name, newbot.bot_id, newbot.avatar_url, newbot.callback_url) == False):
+				if (groupMeBot.botmanager.addBot(newbot.name,
+				 								 newbot.bot_id,
+				 								 groupName,
+				 								 newbot.avatar_url,
+				 								 newbot.callback_url) == False):
 					newbot.destroy()
 					return False
 				return True
@@ -59,7 +65,10 @@ class Behavior():
 	def destroyBot(self, botname):
 		bot_to_destroy = self.getBot(botname)
 		if (bot_to_destroy is not None):
+			groupMeBot.botmanager.removeBotByName(botname)
 			bot_to_destroy.destroy()
+			return True
+		return False
 
 	#get an existing group by name (string)
 	#returns Group instance (groupy API) if found,
