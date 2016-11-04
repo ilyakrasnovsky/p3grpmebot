@@ -9,7 +9,7 @@ class TestBehavior(TestCase):
 	def test_000_meMyselfAndI(self):
 		#groupyAPI is working
 		myBehavior = Behavior()
-		self.assertEqual(str(myBehavior.meMyselfAndI()), 'Ilya Krasnovsky')
+		self.assertEqual(str(myBehavior.meMyselfAndI().name), 'Ilya Krasnovsky')
 
 	def test_001_getGroup(self):
 		myBehavior = Behavior()
@@ -106,4 +106,17 @@ class TestBehavior(TestCase):
 		ilyabot.post("Hi")
 		#use my destroy function to destroy dtangbot
 		myBehavior.destroyBot(ilyabot.name)
+
+	def test_007_changeMe(self):
+		myBehavior = Behavior()
+		#save my old name
+		oldname = str(myBehavior.meMyselfAndI().name)
+		#change my name
+		self.assertTrue(myBehavior.changeMe("I am Lord Voldemort"))
+		#fail to 
+
+		#verfiy my name change
+		self.assertEqual(str(myBehavior.meMyselfAndI().name), "I am Lord Voldemort")
+		#change my name back
+		myBehavior.changeMe(oldname)
 

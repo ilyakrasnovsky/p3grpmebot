@@ -16,6 +16,22 @@ class Behavior():
 	def meMyselfAndI(self):
 		return groupy.User.get()
 
+	def changeMyName(self, newname, groupName):
+		userme = self.meMyselfAndI()
+		if (userme is not None):
+			try:
+				newidentity = dict()
+				newidentity['nickname'] = newname
+				newidentity['user_id'] = userme.user_id
+				memberme = self.getVictimFromGroup(me.name)
+				if (memberme is not None):
+
+					.identify(newidentity)
+			except ValueError:
+				print ("FAIL")
+				return False
+		return False
+
 	#get an existing bot by name (string)
 	#returns Bot instance (groupy API) if found,
 	#None if not
