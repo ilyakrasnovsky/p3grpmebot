@@ -79,11 +79,11 @@ class TestBehavior(TestCase):
 		#fail to destroy it again because it was already destroyed
 		self.assertFalse(myBehavior.destroyBot("Dorothy Tang "))
 
-	def test006_botAssimilate(self):
+	def test_006_botAssimilate(self):
 		myBehavior = Behavior()
 		#make a bot in boo to haunt user "Dorothy Tang"
-		self.assertTrue(myBehavior.botAssimilate("Dorothy Tang",
-			"boo",
+		self.assertTrue(myBehavior.botAssimilate("Ilya Krasnovsky",
+			"Tests",
 			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 			"https://www.google.com"))
 		#fail to haunt a nonexistent user
@@ -91,14 +91,19 @@ class TestBehavior(TestCase):
 			"Tests",
 			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 			"https://www.google.com"))
+		#fail to make more than one bot to haunt one user
+		self.assertFalse(myBehavior.botAssimilate("Ilya Krasnovsky",
+			"Tests",
+			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+			"https://www.google.com"))
 		#fail to haunt a bot
-		self.assertFalse(myBehavior.botAssimilate("Dorothy Tang ",
+		self.assertFalse(myBehavior.botAssimilate("Ilya Krasnovsky ",
 			"boo",
 			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 			"https://www.google.com"))
 		#make the bot say something
-		dtangbot = myBehavior.getBot("Dorothy Tang ")
-		dtangbot.post("Hai")
+		ilyabot = myBehavior.getBot("Ilya Krasnovsky ")
+		ilyabot.post("Hi")
 		#use my destroy function to destroy dtangbot
-		myBehavior.destroyBot(dtangbot.name)
+		myBehavior.destroyBot(ilyabot.name)
 
