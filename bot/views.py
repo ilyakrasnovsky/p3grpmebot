@@ -18,6 +18,7 @@ def boobot(request):
 		json_str = ((request.body).decode('utf-8'))
 		jsondata = json.loads(json_str)
 		
+		'''
 		#make sure incoming data is not corrupted
 		if ('name' in jsondata):
 			#if the real bot victim changes their name, have the
@@ -34,10 +35,11 @@ def boobot(request):
 				hannah_bot = behavior.getBot("Haiti Badding Sr ")
 				if (hannah_bot is not None):
 					hannah_bot.post("Hi! I'm Hannah!")
-				
+		'''
+			
 		#Save the post to my database
-		#dbmgr1 = dbmgr.Dbmgr()
-		#dbmgr1.fdb.post("/data/", jsondata)
+		dbmgr1 = dbmgr.Dbmgr()
+		dbmgr1.fdb.post("/data/", jsondata)
 		
 	return render(request, 'bot/home.html')
 

@@ -112,11 +112,11 @@ class TestBehavior(TestCase):
 		#save my old name
 		oldname = str(myBehavior.meMyselfAndI().name)
 		#change my name
-		self.assertTrue(myBehavior.changeMe("I am Lord Voldemort"))
+		self.assertTrue(myBehavior.changeMyName("I am Lord Voldemort", "Tests"))
 		#fail to 
 
 		#verfiy my name change
 		self.assertEqual(str(myBehavior.meMyselfAndI().name), "I am Lord Voldemort")
 		#change my name back
-		myBehavior.changeMe(oldname)
+		myBehavior.changeMyName(oldname, "Tests")
 

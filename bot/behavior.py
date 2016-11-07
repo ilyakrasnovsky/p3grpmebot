@@ -23,10 +23,9 @@ class Behavior():
 				newidentity = dict()
 				newidentity['nickname'] = newname
 				newidentity['user_id'] = userme.user_id
-				memberme = self.getVictimFromGroup(me.name)
+				memberme = self.getVictimFromGroup(userme.name, groupName)
 				if (memberme is not None):
-
-					.identify(newidentity)
+					memberme.identify(newidentity)
 			except ValueError:
 				print ("FAIL")
 				return False
