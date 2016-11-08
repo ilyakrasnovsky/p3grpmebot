@@ -141,7 +141,8 @@ class TestBehavior(TestCase):
 		#fail to change a bot if victim name was wrong
 		self.assertFalse(myBehavior.botAdaptToNameChange("wahbot", "Dorothy Tang"))
 		#destroy the bot
-		myBehavior.destroyBot("Ilya Krasnovsky")
+		myBehavior.destroyBot("Ilya Krasnovsky ")
+		
 		#make a bot to haunt Ilya Krasnovsky in boo
 		myBehavior.botAssimilate("Ilya Krasnovsky",
 			"boo",
@@ -150,7 +151,7 @@ class TestBehavior(TestCase):
 		#successfuly change the bot to haunt Dorothy Tang
 		self.assertTrue(myBehavior.botAdaptToNameChange("Dorothy Tang", "Ilya Krasnovsky"))
 		#destroy the bot
-		myBehavior.destroyBot("Ilya Krasnovsky")
+		myBehavior.destroyBot("Dorothy Tang ")
 
 	def test_010_botAdaptToAvatarChange(self):
 		myBehavior = Behavior()
@@ -165,6 +166,22 @@ class TestBehavior(TestCase):
 		#fail to change a bot if victim name was wrong
 		self.assertFalse(myBehavior.botAdaptToAvatarChange("Dorothy Tang",
 			"https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"))
+		#destroy the bot
+		myBehavior.destroyBot("Ilya Krasnovsky ")
+		
+	def test_011_botBehave(self):
+		myBehavior = Behavior()
+		#make a bot to haunt Ilya Krasnovsky in Tests
+		myBehavior.botAssimilate("Ilya Krasnovsky",
+			"Tests",
+			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+			"https://www.google.com")
+		#successfully get the bot to behave
+		self.assertTrue(myBehavior.botBehave("Ilya Krasnovsky ", "How are you?"))
+		#successfully get the bot to behave
+		self.assertTrue(myBehavior.botBehave("Ilya Krasnovsky ", "How is the weather?"))
+		#fail to get a nonexistent bot to behave
+		self.assertFalse(myBehavior.botBehave("Dorothy Tang ", "How is the weather?"))
 		#destroy the bot
 		myBehavior.destroyBot("Ilya Krasnovsky ")
 		
