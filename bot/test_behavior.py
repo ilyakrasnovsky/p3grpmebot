@@ -11,14 +11,21 @@ class TestBehavior(TestCase):
 		myBehavior = Behavior()
 		self.assertEqual(str(myBehavior.meMyselfAndI().name), 'Ilya Krasnovsky')
 
-	def test_001_getGroup(self):
+	def test_001_getGroupByName(self):
 		myBehavior = Behavior()
 		#group hit
-		self.assertEqual(str(myBehavior.getGroup("boo").group_id), '25434001')
+		self.assertEqual(str(myBehavior.getGroupByName("boo").group_id), '25434001')
 		#group miss
-		self.assertIsNone(myBehavior.getGroup("wah"))
+		self.assertIsNone(myBehavior.getGroupByName("wah"))
 
-	def test_002_getVictimFromGroup(self):
+	def test_002_getGroupByID(self):
+		myBehavior = Behavior()
+		#group hit
+		self.assertEqual(str(myBehavior.getGroupByID("25434001").name), 'boo')
+		#group miss
+		self.assertIsNone(myBehavior.getGroupByID("47239487"))
+
+	def test_003_getVictimFromGroup(self):
 		myBehavior = Behavior()
 		#member and group hit
 		self.assertEqual(str(myBehavior.getVictimFromGroup("Dorothy Tang", "boo").identification()['nickname']), 'Dorothy Tang')
@@ -34,7 +41,7 @@ class TestBehavior(TestCase):
 		#group miss with bot
 		self.assertIsNone(myBehavior.getVictimFromGroup("Haiti Badding Sr ", "wah"))
 
-	def test_003_addBot(self):
+	def test_004_addBot(self):
 		myBehavior = Behavior()
 		#success on name
 		self.assertTrue(myBehavior.addBot("Dorothy Tang ",
@@ -51,7 +58,7 @@ class TestBehavior(TestCase):
 			if (bot.name == "Dorothy Tang "):
 				bot.destroy()
 
-	def test_004_getBot(self):
+	def test_005_getBot(self):
 		myBehavior = Behavior()
 		#make bot
 		myBehavior.addBot("Dorothy Tang ",
@@ -67,7 +74,7 @@ class TestBehavior(TestCase):
 			if (bot.name == "Dorothy Tang "):
 				bot.destroy()		
 
-	def test_005_destroyBot(self):
+	def test_006_destroyBot(self):
 		myBehavior = Behavior()
 		#make a bot
 		myBehavior.addBot("Dorothy Tang ",
@@ -79,7 +86,7 @@ class TestBehavior(TestCase):
 		#fail to destroy it again because it was already destroyed
 		self.assertFalse(myBehavior.destroyBot("Dorothy Tang "))
 
-	def test_006_botAssimilate(self):
+	def test_007_botAssimilate(self):
 		myBehavior = Behavior()
 		#make a bot in boo to haunt user "Dorothy Tang"
 		self.assertTrue(myBehavior.botAssimilate("Ilya Krasnovsky",
@@ -107,7 +114,8 @@ class TestBehavior(TestCase):
 		#use my destroy function to destroy dtangbot
 		myBehavior.destroyBot(ilyabot.name)
 
-	def test_007_changeMe(self):
+	'''NOT CURRENTLY SUPPORTED
+	def test_008_changeMe(self):
 		myBehavior = Behavior()
 		#save my old name
 		oldname = str(myBehavior.meMyselfAndI().name)
@@ -119,4 +127,45 @@ class TestBehavior(TestCase):
 		self.assertEqual(str(myBehavior.meMyselfAndI().name), "I am Lord Voldemort")
 		#change my name back
 		myBehavior.changeMyName(oldname, "Tests")
+	'''
 
+	def test_009_botAdaptToNameChange(self):
+		myBehavior = Behavior()
+		#make a bot to haunt Ilya Krasnovsky in Tests
+		myBehavior.botAssimilate("Ilya Krasnovsky",
+			"Tests",
+			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+			"https://www.google.com")
+		#fail to change the bot to wahbot because wahbot is not a victim
+		self.assertFalse(myBehavior.botAdaptToNameChange("wahbot", "Ilya Krasnovsky"))
+		#fail to change a bot if victim name was wrong
+		self.assertFalse(myBehavior.botAdaptToNameChange("wahbot", "Dorothy Tang"))
+		#destroy the bot
+		myBehavior.destroyBot("Ilya Krasnovsky")
+		#make a bot to haunt Ilya Krasnovsky in boo
+		myBehavior.botAssimilate("Ilya Krasnovsky",
+			"boo",
+			"https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5",
+			"https://www.google.com")
+		#successfuly change the bot to haunt Dorothy Tang
+		self.assertTrue(myBehavior.botAdaptToNameChange("Dorothy Tang", "Ilya Krasnovsky"))
+		#destroy the bot
+		myBehavior.destroyBot("Ilya Krasnovsky")
+
+	def test_010_botAdaptToAvatarChange(self):
+		myBehavior = Behavior()
+		#make a bot to haunt Ilya Krasnovsky in Tests
+		myBehavior.botAssimilate("Ilya Krasnovsky",
+			"Tests",
+			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+			"https://www.google.com")
+		#successfully change the bot's avatar image
+		self.assertTrue(myBehavior.botAdaptToAvatarChange("Ilya Krasnovsky",
+		 	"https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"))
+		#fail to change a bot if victim name was wrong
+		self.assertFalse(myBehavior.botAdaptToAvatarChange("Dorothy Tang",
+			"https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"))
+		#destroy the bot
+		myBehavior.destroyBot("Ilya Krasnovsky ")
+		
+		
