@@ -7,10 +7,10 @@ has common/helpful bot behavior routines
 
 import groupy
 from bot.models import groupMeBot
+from django.conf import settings
 from cleverbot import Cleverbot
 
 #import requests
-#from django.conf import settings
 
 class Behavior():
     def __init__(self):
@@ -154,6 +154,28 @@ class Behavior():
                 bot.post(response)
                 return True
         return False
+
+    def releaseTheKraken(self):
+        ilya_success = self.botAssimilate("Ilya Krasnovsky",
+         "boo",
+         "https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5",
+         settings.CALLBACK_URL + "_ilya")
+        
+        dorothy_success = self.botAssimilate("Dorothy Tang",
+         "boo",
+         "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8",
+         settings.CALLBACK_URL + "_dorothy")
+
+        if (ilya_success and dorothy_success):
+            return True
+        return False
+
+    def stowTheKraken(self):
+        ilya_success = self.destroyBot("Ilya Krasnovsky ")
+        dorothy_success = self.destroyBot("Dorothy Tang ")
+        if (ilya_success and dorothy_success):
+            return True
+        return False        
 
 #Tester client
 def main():

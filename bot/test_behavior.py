@@ -184,5 +184,20 @@ class TestBehavior(TestCase):
 		self.assertFalse(myBehavior.botBehave("Dorothy Tang ", "How is the weather?"))
 		#destroy the bot
 		myBehavior.destroyBot("Ilya Krasnovsky ")
+
+	def test_012_releaseTheKraken(self):
+		myBehavior = Behavior()
+		#try releasing the kraken, make sure bots are properly created
+		self.assertTrue(myBehavior.releaseTheKraken())
+		#make sure you can't do this twice
+		self.assertFalse(myBehavior.releaseTheKraken())
+		#destroy the created bots
+		myBehavior.destroyBot("Ilya Krasnovsky ")
+		myBehavior.destroyBot("Dorothy Tang ")
 		
-		
+	def test_013_stowTheKraken(self):
+		myBehavior = Behavior()
+		#release the kraken first
+		myBehavior.releaseTheKraken()
+		#try stowing the kraken, make sure bots are properly deleted
+		self.assertTrue(myBehavior.stowTheKraken())

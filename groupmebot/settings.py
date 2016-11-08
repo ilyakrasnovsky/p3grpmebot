@@ -47,6 +47,7 @@ else:
     DEBUG = False
 
 FIREBASE_URL = "https://groupmebot-4104f.firebaseio.com/"
+CALLBACK_URL = "https://ilyasgroupmebot.herokuapp.com/boobot"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
