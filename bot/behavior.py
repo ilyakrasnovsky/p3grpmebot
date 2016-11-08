@@ -7,6 +7,7 @@ has common/helpful bot behavior routines
 
 import groupy
 from bot.models import groupMeBot
+import requests
 
 class Behavior():
 	def __init__(self):
