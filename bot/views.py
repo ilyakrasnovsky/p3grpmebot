@@ -63,7 +63,7 @@ def boobot_dorothy(request):
 				#make sure the POSTer was not a bot or the
 				#intended victim
 				if (myBehavior.getBot(jsondata['name']) is None
-					and jsondata['name'] != "Dorothy Tang"):
+					and jsondata['name'] != "Dorothy Tang"): #todo, this cant be hardcoded
 					#make the bot behave!
 					bot = myBehavior.botBehave("Dorothy Tang ", jsondata['text'])
 					
