@@ -33,7 +33,7 @@ def boobot_ilya(request):
 				if (myBehavior.getBot(jsondata['name']) is None
 					and jsondata['name'] != "Ilya Krasnovsky"):
 					#make the bot behave!
-					bot = behavior.botBehave("Ilya Krasnovsky ", jsondata['text'])
+					bot = myBehavior.botBehave("Ilya Krasnovsky ", jsondata['text'])
 				
 		#Save the post to firebase
 		#myDbmgr1 = dbmgr.Dbmgr()
@@ -65,7 +65,7 @@ def boobot_dorothy(request):
 				if (myBehavior.getBot(jsondata['name']) is None
 					and jsondata['name'] != "Dorothy Tang"):
 					#make the bot behave!
-					bot = behavior.botBehave("Dorothy Tang ", jsondata['text'])
+					bot = myBehavior.botBehave("Dorothy Tang ", jsondata['text'])
 					
 		#Save the post to firebase
 		#myDbmgr1 = dbmgr.Dbmgr()
