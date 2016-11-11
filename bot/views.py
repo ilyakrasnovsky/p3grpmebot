@@ -86,6 +86,10 @@ def end_the_fun(request):
 		myBehavior.stowTheKraken()
 	return render(request, 'bot/home.html')
 
+def boobot(request, victimID):
+	print ("victimID : " + str(victimID))
+	return render(request, 'bot/home.html')
+
 '''
 class: Bot
 
