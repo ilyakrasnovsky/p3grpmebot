@@ -1,5 +1,6 @@
 from django.test import TestCase
 from bot.behavior import Behavior
+from bot.models import groupMeBot
 import groupy
 
 class TestBehavior(TestCase):
@@ -44,27 +45,32 @@ class TestBehavior(TestCase):
 	def test_004_addBot(self):
 		myBehavior = Behavior()
 		#success on name
-		self.assertTrue(myBehavior.addBot("Dorothy Tang ",
-		 "Tests",
-		 "https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-		 "https://www.google.com"))
+		self.assertTrue(myBehavior.addBot(name="Dorothy Tang ",
+		 								  groupname="Tests",
+		 								  avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+		 								  callback_url="https://www.google.com",
+										  victimID=1234))
 		#failure on existing name
-		self.assertFalse(myBehavior.addBot("Dorothy Tang ",
-		 "Tests",
-		 "https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-		 "https://www.google.com"))
+		self.assertFalse(myBehavior.addBot(name="Dorothy Tang ",
+		 								  groupname="Tests",
+		 								  avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+		 								  callback_url="https://www.google.com",
+										  victimID=1234))
 		#delete the bot from groupy without my api
 		for bot in groupy.Bot.list():
 			if (bot.name == "Dorothy Tang "):
 				bot.destroy()
+		#delete the bot from the database without my api
+		groupMeBot.botmanager.removeBotByName("Dorothy Tang ")
 
 	def test_005_getBot(self):
 		myBehavior = Behavior()
 		#make bot
-		myBehavior.addBot("Dorothy Tang ",
-		 "Tests",
-		 "https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-		 "https://www.google.com")
+		myBehavior.addBot(name="Dorothy Tang ",
+						  groupname="Tests",
+						  avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+						  callback_url="https://www.google.com",
+						  victimID=1234)
 		#bot hit
 		self.assertEqual(str(myBehavior.getBot("Dorothy Tang ").name), 'Dorothy Tang ')
 		#bot miss
@@ -72,15 +78,18 @@ class TestBehavior(TestCase):
 		#delete the bot from groupy without my api
 		for bot in groupy.Bot.list():
 			if (bot.name == "Dorothy Tang "):
-				bot.destroy()		
+				bot.destroy()
+		#delete the bot from the database without my api
+		groupMeBot.botmanager.removeBotByName("Dorothy Tang ")
 
 	def test_006_destroyBot(self):
 		myBehavior = Behavior()
 		#make a bot
-		myBehavior.addBot("Dorothy Tang ",
-		 "Tests",
-		 "https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-		 "https://www.google.com")
+		myBehavior.addBot(name="Dorothy Tang ",
+						  groupname="Tests",
+						  avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+						  callback_url="https://www.google.com",
+						  victimID=1234)
 		#successfully destroy it
 		self.assertTrue(myBehavior.destroyBot("Dorothy Tang "))
 		#fail to destroy it again because it was already destroyed
@@ -88,26 +97,26 @@ class TestBehavior(TestCase):
 
 	def test_007_botAssimilate(self):
 		myBehavior = Behavior()
-		#make a bot in boo to haunt user "Dorothy Tang"
-		self.assertTrue(myBehavior.botAssimilate("Ilya Krasnovsky",
-			"Tests",
-			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-			"https://www.google.com"))
+		#make a bot in Tests to haunt user "Ilya Krasnovsky"
+		self.assertTrue(myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+												 groupname="Tests",
+												 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+												 callback_url="https://www.google.com"))
 		#fail to haunt a nonexistent user
-		self.assertFalse(myBehavior.botAssimilate("Dorothy Tang",
-			"Tests",
-			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-			"https://www.google.com"))
+		self.assertFalse(myBehavior.botAssimilate(victimName="Dorothy Tang",
+												 groupname="Tests",
+												 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+												 callback_url="https://www.google.com"))
 		#fail to make more than one bot to haunt one user
-		self.assertFalse(myBehavior.botAssimilate("Ilya Krasnovsky",
-			"Tests",
-			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-			"https://www.google.com"))
+		self.assertFalse(myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+												 groupname="Tests",
+												 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+												 callback_url="https://www.google.com"))
 		#fail to haunt a bot
-		self.assertFalse(myBehavior.botAssimilate("Ilya Krasnovsky ",
-			"boo",
-			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-			"https://www.google.com"))
+		self.assertFalse(myBehavior.botAssimilate(victimName="Ilya Krasnovsky ",
+												 groupname="Tests",
+												 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+												 callback_url="https://www.google.com"))
 		#make the bot say something
 		ilyabot = myBehavior.getBot("Ilya Krasnovsky ")
 		ilyabot.post("Hi")
@@ -132,10 +141,10 @@ class TestBehavior(TestCase):
 	def test_009_botAdaptToNameChange(self):
 		myBehavior = Behavior()
 		#make a bot to haunt Ilya Krasnovsky in Tests
-		myBehavior.botAssimilate("Ilya Krasnovsky",
-			"Tests",
-			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-			"https://www.google.com")
+		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+								 groupname="Tests",
+								 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+								 callback_url="https://www.google.com")
 		#fail to change the bot to wahbot because wahbot is not a victim
 		self.assertFalse(myBehavior.botAdaptToNameChange("wahbot", "Ilya Krasnovsky"))
 		#fail to change a bot if victim name was wrong
@@ -144,10 +153,10 @@ class TestBehavior(TestCase):
 		myBehavior.destroyBot("Ilya Krasnovsky ")
 		
 		#make a bot to haunt Ilya Krasnovsky in boo
-		myBehavior.botAssimilate("Ilya Krasnovsky",
-			"boo",
-			"https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5",
-			"https://www.google.com")
+		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+								 groupname="boo",
+								 avatar_url="https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5",
+								 callback_url="https://www.google.com")
 		#successfuly change the bot to haunt Dorothy Tang
 		self.assertTrue(myBehavior.botAdaptToNameChange("Dorothy Tang", "Ilya Krasnovsky"))
 		#destroy the bot
@@ -156,10 +165,10 @@ class TestBehavior(TestCase):
 	def test_010_botAdaptToAvatarChange(self):
 		myBehavior = Behavior()
 		#make a bot to haunt Ilya Krasnovsky in Tests
-		myBehavior.botAssimilate("Ilya Krasnovsky",
-			"Tests",
-			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-			"https://www.google.com")
+		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+								 groupname="Tests",
+								 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+								 callback_url="https://www.google.com")
 		#successfully change the bot's avatar image
 		self.assertTrue(myBehavior.botAdaptToAvatarChange("Ilya Krasnovsky",
 		 	"https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"))
@@ -172,10 +181,10 @@ class TestBehavior(TestCase):
 	def test_011_botBehave(self):
 		myBehavior = Behavior()
 		#make a bot to haunt Ilya Krasnovsky in Tests
-		myBehavior.botAssimilate("Ilya Krasnovsky",
-			"Tests",
-			"https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
-			"https://www.google.com")
+		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+								 groupname="Tests",
+								 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
+								 callback_url="https://www.google.com")
 		#successfully get the bot to behave
 		self.assertTrue(myBehavior.botBehave("Ilya Krasnovsky ", "How are you?"))
 		#successfully get the bot to behave

@@ -4,26 +4,27 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
 class BotManager(models.Manager):
-    def getBotByName(self, botname):
+    def getBotByName(self, name):
         try:
-            bot = self.get(name=botname)
+            bot = self.get(name=name)
             return bot
         except groupMeBot.DoesNotExist:
             return None
 
-    def getBotByID(self, botid):
+    def getBotByID(self, botID):
         try:
-            bot = self.get(botid=botid)
+            bot = self.get(botID=botID)
             return bot
         except groupMeBot.DoesNotExist:
             return None
 
-    def addBot(self, botname, botid, groupname, avatar_URL, callback_URL):
+    def addBot(self, name, botID, victimID, groupname, avatar_url, callback_url):
         try:    
-            bot = groupMeBot(name = botname,
-                            botid = botid,
-                            avatar_url = avatar_URL,
-                            callback_url = callback_URL,
+            bot = groupMeBot(name = name,
+                            botID = botID,
+                            victimID = victimID,
+                            avatar_url = avatar_url,
+                            callback_url = callback_url,
                             groupname = groupname)
             bot.full_clean()
             bot.save()
@@ -40,9 +41,9 @@ class BotManager(models.Manager):
             return True
         return False
 
-    def removeBotByID(self, botid):
-        if (self.getBotByID(botid) is not None):
-            numDeleted = self.getBotByID(botid).delete()
+    def removeBotByID(self, botID):
+        if (self.getBotByID(botID) is not None):
+            numDeleted = self.getBotByID(botID).delete()
             #only ever supposed to delete one bot
             if (numDeleted[0] != 1 or numDeleted[1]['bot.groupMeBot'] != 1):
                 return False
@@ -52,8 +53,9 @@ class BotManager(models.Manager):
 #inherits from Model
 #id field generated automatically, basically like SQL
 class groupMeBot(models.Model):
-	botid = models.TextField(unique=True)
+	botID = models.TextField(unique=True)
 	name = models.TextField(unique=True) #shorter than textfield
+	victimID = models.IntegerField(unique=True)
 	groupname = models.TextField(default="Tests")
 	callback_url = models.URLField(default="https://www.google.com", validators=[URLValidator])
 	avatar_url = models.URLField(default="https://www.google.com", validators=[URLValidator])

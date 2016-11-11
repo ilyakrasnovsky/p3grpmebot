@@ -3,7 +3,9 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
- 	url(r'^$', views.index, name='index'),   
+ 	url(r'^$', views.index, name='index'),
+	#url(r'^boobot/(?P<victimID>\d+)/$', views.boobot_ilya, name='boobot_ilya'),
+ 	   
  	url(r'^boobot_ilya', views.boobot_ilya, name='boobot_ilya'),
  	url(r'^boobot_dorothy', views.boobot_dorothy, name='boobot_dorothy'),	
  	url(r'^start_the_fun', views.start_the_fun, name='start_the_fun'),

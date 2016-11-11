@@ -35,35 +35,40 @@ class Behavior():
     #get an existing bot by name (string)
     #returns Bot instance (groupy API) if found,
     #None if not
-    def getBot(self, botname):
-        modelbot = groupMeBot.botmanager.getBotByName(botname)
+    def getBot(self, name):
+        modelbot = groupMeBot.botmanager.getBotByName(name)
         if (modelbot is not None):
             for mybot in groupy.Bot.list():
-                if (mybot.name == botname):
+                if (mybot.name == name):
                     return mybot
         return None
 
-    #make a bot to haunt victimName (string) in groupName (string)
+    #make a bot to haunt victimName string) in groupName (string)
     #with avatar_url (groupMe URL as string) and callback_url
     #returns True if successful, False if not
-    def botAssimilate(self, victimName, groupName, avatar_url, callback_url):
-        if (self.getVictimFromGroup(victimName, groupName) is not None):
-            if (self.addBot(victimName + " ", groupName, avatar_url, callback_url)):
+    def botAssimilate(self, victimName, groupname, avatar_url, callback_url):
+        if (self.getVictimFromGroup(victimName, groupname) is not None):
+            if (self.addBot(name=victimName + " ",
+            				groupname=groupname,
+            				avatar_url=avatar_url,
+            				callback_url=callback_url,
+            				victimID=self.getVictimFromGroup(victimName=victimName, groupname=groupname).user_id)):
                 return True
         return False
 
-    def addBot(self, botname, groupName, avatar_url, callback_url):
-        if (groupMeBot.botmanager.getBotByName(botname) is None):
+    def addBot(self, name, groupname, victimID, avatar_url, callback_url):
+        if (groupMeBot.botmanager.getBotByName(name) is None):
             try:
-                newbot = groupy.Bot.create(botname, 
-                                  self.getGroupByName(groupName),
-                                  avatar_url,
-                                  callback_url)
-                if (groupMeBot.botmanager.addBot(newbot.name,
-                                                 newbot.bot_id,
-                                                 groupName,
-                                                 newbot.avatar_url,
-                                                 newbot.callback_url) == False):
+                newbot = groupy.Bot.create(name=name, 
+                                  		   group=self.getGroupByName(groupname),
+                                  		   avatar_url=avatar_url,
+                                  		   callback_url=callback_url)
+                if (groupMeBot.botmanager.addBot(name=newbot.name,
+                                                 botID=newbot.bot_id,
+                                                 victimID=victimID,
+                                                 groupname=groupname,
+                                                 avatar_url=newbot.avatar_url,
+                                                 callback_url=newbot.callback_url) == False):
                     newbot.destroy()
                     return False
                 return True
@@ -83,9 +88,9 @@ class Behavior():
     #get an existing group by name (string)
     #returns Group instance (groupy API) if found,
     #None if not
-    def getGroupByName(self, groupName):
+    def getGroupByName(self, groupname):
         for group in groupy.Group.list(): 
-            if(group.name == groupName):
+            if(group.name == groupname):
                 return group
         return None
 
@@ -98,8 +103,8 @@ class Behavior():
     #Finds a victim whose name is victimName(string)
     #in the groupme group given by groupName. returns
     #Member instance (groupy API) if found, None if not
-    def getVictimFromGroup(self, victimName, groupName):
-        group = self.getGroupByName(groupName)
+    def getVictimFromGroup(self, victimName, groupname):
+        group = self.getGroupByName(groupname)
         if (group is not None):
             for mem in group.members():
                 if (mem.identification()['nickname'] == victimName):
@@ -112,8 +117,9 @@ class Behavior():
         if (bot is not None):
             avatar_url = bot.avatar_url
             callback_url = bot.callback_url
-            groupname = self.getGroupByID(bot.group_id).name
-            if (groupname is not None):
+            group = self.getGroupByID(bot.group_id)
+            if (group is not None and self.getVictimFromGroup(newVictimName, group.name) is not None):
+                groupname = group.name
                 bot.post("I take my leave, and pass the torch.")
                 self.destroyBot(oldVictimName + " ")
                 success = self.botAssimilate(newVictimName,
@@ -146,8 +152,8 @@ class Behavior():
                         return True
         return False
 
-    def botBehave(self, botname, message):
-        bot = self.getBot(botname)
+    def botBehave(self, name, message):
+        bot = self.getBot(name)
         if (bot is not None):
             response = self.cb.ask(message)
             if (response is not None):
