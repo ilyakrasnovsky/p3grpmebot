@@ -100,6 +100,17 @@ class Behavior():
                 return group
         return None
 
+    def getVictimByID(self, victimID):
+        for mem in groupy.Member.list():
+            #print (mem.identification()['nickname'] + " : " + str(mem.identification()['user_id']) + ", " + str(mem.identification()['guid']))
+            try:
+                if (mem.identification()['user_id'] == victimID):
+                    return mem
+            except ValueError:
+                print ("Fail")
+                return None
+        return None
+
     #Finds a victim whose name is victimName(string)
     #in the groupme group given by groupName. returns
     #Member instance (groupy API) if found, None if not

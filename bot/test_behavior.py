@@ -5,7 +5,8 @@ import groupy
 
 class TestBehavior(TestCase):
 	def setUp(self):
-		pass
+		myBehavior = Behavior()
+		myBehavior.stowTheKraken()
 
 	def test_000_meMyselfAndI(self):
 		#groupyAPI is working
@@ -210,3 +211,11 @@ class TestBehavior(TestCase):
 		myBehavior.releaseTheKraken()
 		#try stowing the kraken, make sure bots are properly deleted
 		self.assertTrue(myBehavior.stowTheKraken())
+
+	def test_014_getVictimByID(self):
+		myBehavior = Behavior()
+		#member hit
+		self.assertEqual(str(myBehavior.getVictimByID("13598406").identification()['nickname']), 'Ilya Krasnovsky')
+		#member miss
+		self.assertIsNone(myBehavior.getVictimByID("34343434"))
+		
