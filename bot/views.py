@@ -12,9 +12,9 @@ def index(request):
 
 @csrf_exempt
 def boobot_ilya(request):
-	myBehavior = behavior.Behavior()
 	#only perform logic if the request was a post
 	if (request.method == "POST"):
+		myBehavior = behavior.Behavior()
 		#parse out HTTP POST request from groupme as json
 		json_str = ((request.body).decode('utf-8'))
 		jsondata = json.loads(json_str)
@@ -44,9 +44,9 @@ def boobot_ilya(request):
 
 @csrf_exempt
 def boobot_dorothy(request):
-	myBehavior = behavior.Behavior()
 	#only perform logic if the request was a post
 	if (request.method == "POST"):
+		myBehavior = behavior.Behavior()
 		#parse out HTTP POST request from groupme as json
 		json_str = ((request.body).decode('utf-8'))
 		jsondata = json.loads(json_str)
@@ -75,18 +75,18 @@ def boobot_dorothy(request):
 	return render(request, 'bot/home.html')
 
 def start_the_fun(request):
-	myBehavior = behavior.Behavior()
 	if (request.method == "GET"):
+		myBehavior = behavior.Behavior()
 		myBehavior.releaseTheKraken()
 	return render(request, 'bot/home.html')			
 
 def end_the_fun(request):
-	myBehavior = behavior.Behavior()
 	if (request.method == "GET"):
+		myBehavior = behavior.Behavior()
 		myBehavior.stowTheKraken()
 	return render(request, 'bot/home.html')
 
-def boobot(request, victimID):
+def behave(request, victimID):
 	print ("victimID : " + str(victimID))
 	return render(request, 'bot/home.html')
 
