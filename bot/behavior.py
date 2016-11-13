@@ -131,7 +131,7 @@ class Behavior():
             group = self.getGroupByID(bot.group_id)
             if (group is not None and self.getVictimFromGroup(newVictimName, group.name) is not None):
                 groupname = group.name
-                bot.post("I take my leave, and pass the torch.")
+                #bot.post("I take my leave, and pass the torch.")
                 self.destroyBot(oldVictimName + " ")
                 success = self.botAssimilate(newVictimName,
                                     groupname,
@@ -140,7 +140,7 @@ class Behavior():
                 if (success):
                     newbot = self.getBot(newVictimName + " ")
                     if (newbot is not None):
-                        newbot.post("I have picked up the torch. HueHueHue...")
+                        #newbot.post("I have picked up the torch. HueHueHue...")
                         return True
         return False
 
@@ -150,7 +150,7 @@ class Behavior():
             callback_url = bot.callback_url
             groupname = self.getGroupByID(bot.group_id).name
             if (groupname is not None):
-                bot.post("I take my leave, and pass the torch.")
+                #bot.post("I take my leave, and pass the torch.")
                 self.destroyBot(victimName + " ")
                 success = self.botAssimilate(victimName,
                                     groupname,
@@ -159,7 +159,7 @@ class Behavior():
                 if (success):
                     newbot = self.getBot(victimName + " ")
                     if (newbot is not None):
-                        newbot.post("I have picked up the torch. HueHueHue...")
+                        #newbot.post("I have picked up the torch. HueHueHue...")
                         return True
         return False
 
