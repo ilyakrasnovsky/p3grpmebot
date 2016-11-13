@@ -118,6 +118,8 @@ def behave(request, victimID):
 		#myDbmgr1 = dbmgr.Dbmgr()
 		#myDbmgr1.fdb.post("/data/", jsondata)
 		#myDbmgr1.fdb.post("/murp/", json.dumps(system_message))
+	return render(request, 'bot/home.html')
+
 
 '''
 class: Bot
