@@ -103,13 +103,16 @@ def behave(request, victimID):
 				if (re.search(" changed name to ", jsondata['text']) is not None):
 					(oldVictimName, newVictimName) = re.split(" changed name to ", jsondata['text'])
 					myBehavior.botAdaptToNameChange(newVictimName, oldVictimName)
+				#TODO: IK, if the real bot victim changes their avatar, have the bot adapt
 			else:
+				#get the victim
+				victim = myBehavior.getVictimByID(victimID)
 				#make sure the POSTer was not a bot or the
 				#intended victim
 				if (myBehavior.getBot(jsondata['name']) is None
-					and jsondata['name'] != "Dorothy Tang"): #todo, this cant be hardcoded
+					and jsondata['name'] != victim.identification()['nickname']):
 					#make the bot behave!
-					bot = myBehavior.botBehave("Dorothy Tang ", jsondata['text'])
+					bot = myBehavior.botBehave(victim.identification()['nickname'] + " ", jsondata['text'])
 					
 		#Save the post to firebase
 		#myDbmgr1 = dbmgr.Dbmgr()
