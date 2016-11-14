@@ -178,6 +178,14 @@ class Behavior():
         except groupMeBot.DoesNotExist:
             return None
 
+    def getVictimFromGroupByVictimID(self, victimID, groupname):
+        group = self.getGroupByName(groupname)
+        if (group is not None):
+            for mem in group.members():
+                if (mem.identification()['user_id'] == victimID):
+                    return mem
+        return None
+
     def releaseTheKraken(self):
         ilya = self.getVictimFromGroup("Ilya Krasnovsky", "boo")
         ilya_success = self.botAssimilate("Ilya Krasnovsky",
