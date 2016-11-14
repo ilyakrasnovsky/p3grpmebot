@@ -107,15 +107,12 @@ def behave(request, victimID):
 			else:
 				#get the victim
 				victim = myBehavior.getVictimByID(victimID)
-				print (jsondata['name'])
-				print (victim.identification()['nickname'])
-				print (myBehavior.getVictimFromGroup(jsondata['name']), "boo")
 				#make sure the POSTer was not a bot or the
 				#intended victim
 				if (myBehavior.getBot(jsondata['name']) is None
-					and jsondata['name'] != victim.identification()['nickname']):
+					and jsondata['user_id'] != victimID):
 					#make the bot behave!
-					bot = myBehavior.botBehave(victim.identification()['nickname'] + " ", jsondata['text'])
+					bot = myBehavior.botBehave(myBehavior.getBotByVictimID(victimID).name, jsondata['text'])
 					
 		#Save the post to firebase
 		#myDbmgr1 = dbmgr.Dbmgr()
