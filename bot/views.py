@@ -109,6 +109,7 @@ def behave(request, victimID):
 				victim = myBehavior.getVictimByID(victimID)
 				print (jsondata['name'])
 				print (victim.identification()['nickname'])
+				print (myBehavior.getVictimFromGroup(jsondata['name']), "boo")
 				#make sure the POSTer was not a bot or the
 				#intended victim
 				if (myBehavior.getBot(jsondata['name']) is None

@@ -172,6 +172,12 @@ class Behavior():
                 return True
         return False
 
+    def getBotByVictimID(self, victimID):
+        try:
+            return groupMeBot.botmanager.get(victimID=victimID)
+        except groupMeBot.DoesNotExist:
+            return None
+
     def releaseTheKraken(self):
         ilya = self.getVictimFromGroup("Ilya Krasnovsky", "boo")
         ilya_success = self.botAssimilate("Ilya Krasnovsky",
@@ -190,11 +196,12 @@ class Behavior():
         return False
 
     def stowTheKraken(self):
-        ilya_success = self.destroyBot("Ilya Krasnovsky ")
-        dorothy_success = self.destroyBot("Dorothy Tang ")
-        if (ilya_success and dorothy_success):
-            return True
-        return False        
+        foundFailure = False
+        allBots = groupMeBot.botmanager.all()
+        for bot in allBots:
+            if (not self.destroyBot(bot.name)):
+                foundFailure = True
+        return (not foundFailure)
 
 #Tester client
 def main():
