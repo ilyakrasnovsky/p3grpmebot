@@ -187,14 +187,14 @@ class Behavior():
         return None
 
     def releaseTheKraken(self):
-        ilya = self.getVictimFromGroup("Ilya Krasnovsky", "boo")
-        ilya_success = self.botAssimilate("Ilya Krasnovsky",
+        ilya = self.getVictimFromGroupByVictimID("13598406", "boo")
+        ilya_success = self.botAssimilate(ilya.identification()['nickname'],
          "boo",
          "https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5",
          settings.CALLBACK_URL + "/" + str(ilya.user_id))
         
-        dorothy = self.getVictimFromGroup("Dorothy Tang", "boo")
-        dorothy_success = self.botAssimilate("Dorothy Tang",
+        dorothy = self.getVictimFromGroupByVictimID("11545746", "boo")
+        dorothy_success = self.botAssimilate(dorothy.identification()['nickname'],
          "boo",
          "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8",
          settings.CALLBACK_URL + "/" + str(dorothy.user_id))

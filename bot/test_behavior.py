@@ -98,30 +98,31 @@ class TestBehavior(TestCase):
 
 	def test_007_botAssimilate(self):
 		myBehavior = Behavior()
-		#make a bot in Tests to haunt user "Ilya Krasnovsky"
-		self.assertTrue(myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+		#make a bot in Tests to haunt user "Ilya Krasnovsky" by id
+		ilya = myBehavior.getVictimFromGroupByVictimID("13598406", "Tests")
+		self.assertTrue(myBehavior.botAssimilate(victimName=ilya.identification()['nickname'],
 												 groupname="Tests",
 												 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 												 callback_url="https://www.google.com"))
+		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
 		#fail to haunt a nonexistent user
 		self.assertFalse(myBehavior.botAssimilate(victimName="Dorothy Tang",
 												 groupname="Tests",
 												 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 												 callback_url="https://www.google.com"))
 		#fail to make more than one bot to haunt one user
-		self.assertFalse(myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+		self.assertFalse(myBehavior.botAssimilate(victimName=ilya.identification()['nickname'],
 												 groupname="Tests",
 												 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 												 callback_url="https://www.google.com"))
 		#fail to haunt a bot
-		self.assertFalse(myBehavior.botAssimilate(victimName="Ilya Krasnovsky ",
+		self.assertFalse(myBehavior.botAssimilate(victimName=ilyabot.name,
 												 groupname="Tests",
 												 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 												 callback_url="https://www.google.com"))
 		#make the bot say something
-		ilyabot = myBehavior.getBot("Ilya Krasnovsky ")
 		ilyabot.post("Hi")
-		#use my destroy function to destroy dtangbot
+		#use my destroy function to destroy ilyabot
 		myBehavior.destroyBot(ilyabot.name)
 
 	'''NOT CURRENTLY SUPPORTED
@@ -142,58 +143,67 @@ class TestBehavior(TestCase):
 	def test_009_botAdaptToNameChange(self):
 		myBehavior = Behavior()
 		#make a bot to haunt Ilya Krasnovsky in Tests
-		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+		ilya = myBehavior.getVictimFromGroupByVictimID("13598406", "Tests")
+		myBehavior.botAssimilate(victimName=ilya.identification()['nickname'],
 								 groupname="Tests",
 								 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 								 callback_url="https://www.google.com")
+		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
 		#fail to change the bot to wahbot because wahbot is not a victim
-		self.assertFalse(myBehavior.botAdaptToNameChange("wahbot", "Ilya Krasnovsky"))
+		self.assertFalse(myBehavior.botAdaptToNameChange("wahbot", ilya.identification()['nickname']))
 		#fail to change a bot if victim name was wrong
-		self.assertFalse(myBehavior.botAdaptToNameChange("wahbot", "Dorothy Tang"))
+		self.assertFalse(myBehavior.botAdaptToNameChange("Dorothy Tang", ilya.identification()['nickname']))
 		#destroy the bot
-		myBehavior.destroyBot("Ilya Krasnovsky ")
+		myBehavior.destroyBot(ilyabot.name)
 		
 		#make a bot to haunt Ilya Krasnovsky in boo
-		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+		ilya = myBehavior.getVictimFromGroupByVictimID("13598406", "boo")
+		myBehavior.botAssimilate(victimName=ilya.identification()['nickname'],
 								 groupname="boo",
 								 avatar_url="https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5",
 								 callback_url="https://www.google.com")
+		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
 		#successfuly change the bot to haunt Dorothy Tang
-		self.assertTrue(myBehavior.botAdaptToNameChange("Dorothy Tang", "Ilya Krasnovsky"))
+		dorothy = myBehavior.getVictimFromGroupByVictimID("11545746", "boo")
+		self.assertTrue(myBehavior.botAdaptToNameChange(dorothy.identification()['nickname'], ilya.identification()['nickname']))
 		#destroy the bot
-		myBehavior.destroyBot("Dorothy Tang ")
+		myBehavior.destroyBot(ilyabot.name)
 
 	def test_010_botAdaptToAvatarChange(self):
 		myBehavior = Behavior()
 		#make a bot to haunt Ilya Krasnovsky in Tests
-		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+		ilya = myBehavior.getVictimFromGroupByVictimID("13598406", "Tests")
+		myBehavior.botAssimilate(victimName=ilya.identification()['nickname'],
 								 groupname="Tests",
 								 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 								 callback_url="https://www.google.com")
+		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
 		#successfully change the bot's avatar image
-		self.assertTrue(myBehavior.botAdaptToAvatarChange("Ilya Krasnovsky",
+		self.assertTrue(myBehavior.botAdaptToAvatarChange(ilya.identification()['nickname'],
 		 	"https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"))
 		#fail to change a bot if victim name was wrong
 		self.assertFalse(myBehavior.botAdaptToAvatarChange("Dorothy Tang",
 			"https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"))
 		#destroy the bot
-		myBehavior.destroyBot("Ilya Krasnovsky ")
+		myBehavior.destroyBot(ilyabot.name)
 		
 	def test_011_botBehave(self):
 		myBehavior = Behavior()
 		#make a bot to haunt Ilya Krasnovsky in Tests
-		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+		ilya = myBehavior.getVictimFromGroupByVictimID("13598406", "Tests")
+		myBehavior.botAssimilate(victimName=ilya.identification()['nickname'],
 								 groupname="Tests",
 								 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 								 callback_url="https://www.google.com")
+		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
 		#successfully get the bot to behave
-		self.assertTrue(myBehavior.botBehave("Ilya Krasnovsky ", "How are you?"))
+		self.assertTrue(myBehavior.botBehave(ilyabot.name, "How are you?"))
 		#successfully get the bot to behave
-		self.assertTrue(myBehavior.botBehave("Ilya Krasnovsky ", "How is the weather?"))
+		self.assertTrue(myBehavior.botBehave(ilyabot.name, "How is the weather?"))
 		#fail to get a nonexistent bot to behave
 		self.assertFalse(myBehavior.botBehave("Dorothy Tang ", "How is the weather?"))
 		#destroy the bot
-		myBehavior.destroyBot("Ilya Krasnovsky ")
+		myBehavior.destroyBot(ilyabot.name)
 
 	def test_012_releaseTheKraken(self):
 		myBehavior = Behavior()
@@ -202,8 +212,10 @@ class TestBehavior(TestCase):
 		#make sure you can't do this twice
 		self.assertFalse(myBehavior.releaseTheKraken())
 		#destroy the created bots
-		myBehavior.destroyBot("Ilya Krasnovsky ")
-		myBehavior.destroyBot("Dorothy Tang ")
+		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
+		dorothybot = myBehavior.getBot(myBehavior.getBotByVictimID("11545746").name)
+		myBehavior.destroyBot(ilyabot.name)
+		myBehavior.destroyBot(dorothybot.name)
 		
 	def test_013_stowTheKraken(self):
 		myBehavior = Behavior()
@@ -222,27 +234,29 @@ class TestBehavior(TestCase):
 	def test_015_getBotByVictimID(self):
 		myBehavior = Behavior()
 		#make a bot to haunt Ilya Krasnovsky in Tests
-		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+		ilya = myBehavior.getVictimFromGroupByVictimID("13598406", "Tests")
+		myBehavior.botAssimilate(victimName=ilya.identification()['nickname'],
 								 groupname="Tests",
 								 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 								 callback_url="https://www.google.com")
-		
+		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
 		#bot hit
-		self.assertEqual(myBehavior.getBotByVictimID(13598406).name, "Ilya Krasnovsky ")
+		self.assertEqual(myBehavior.getBotByVictimID("13598406").name, ilya.identification()['nickname'] + " ")
 		#bot miss
-		self.assertIsNone(myBehavior.getBotByVictimID(3434343434))
-		myBehavior.destroyBot("Ilya Krasnovsky ")
+		self.assertIsNone(myBehavior.getBotByVictimID("3434343434"))
+		myBehavior.destroyBot(ilyabot.name)
 
 	def test_016_getVictimFromGroupByVictimID(self):
 		myBehavior = Behavior()
-		#make a bot to haunt Fister Roboto in Tests
-		myBehavior.botAssimilate(victimName="Ilya Krasnovsky",
+		#make a bot to haunt Ilya Krasnovsky in Tests
+		ilya = myBehavior.getVictimFromGroupByVictimID("13598406", "Tests")
+		myBehavior.botAssimilate(victimName=ilya.identification()['nickname'],
 								 groupname="Tests",
 								 avatar_url="https://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb",
 								 callback_url="https://www.google.com")
-		
-		#bot hit
-		self.assertEqual(myBehavior.getVictimFromGroupByVictimID("13598406", "Tests").identification()['nickname'], "Ilya Krasnovsky")
-		#bot miss
+		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
+		#victim hit
+		self.assertEqual(myBehavior.getVictimFromGroupByVictimID("13598406", "Tests").identification()['nickname'], ilya.identification()['nickname'])
+		#victim miss
 		self.assertIsNone(myBehavior.getVictimFromGroupByVictimID("3434343434", "Tests"))
-		myBehavior.destroyBot("Ilya Krasnovsky ")
+		myBehavior.destroyBot(ilyabot.name)
