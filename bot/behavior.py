@@ -49,10 +49,10 @@ class Behavior():
     def botAssimilate(self, victimName, groupname, avatar_url, callback_url):
         if (self.getVictimFromGroup(victimName, groupname) is not None):
             if (self.addBot(name=victimName + " ",
-            				groupname=groupname,
-            				avatar_url=avatar_url,
-            				callback_url=callback_url,
-            				victimID=self.getVictimFromGroup(victimName=victimName, groupname=groupname).user_id)):
+                            groupname=groupname,
+                            avatar_url=avatar_url,
+                            callback_url=callback_url,
+                            victimID=self.getVictimFromGroup(victimName=victimName, groupname=groupname).user_id)):
                 return True
         return False
 
@@ -60,9 +60,9 @@ class Behavior():
         if (groupMeBot.botmanager.getBotByName(name) is None):
             try:
                 newbot = groupy.Bot.create(name=name, 
-                                  		   group=self.getGroupByName(groupname),
-                                  		   avatar_url=avatar_url,
-                                  		   callback_url=callback_url)
+                                           group=self.getGroupByName(groupname),
+                                           avatar_url=avatar_url,
+                                           callback_url=callback_url)
                 if (groupMeBot.botmanager.addBot(name=newbot.name,
                                                  botID=newbot.bot_id,
                                                  victimID=victimID,
@@ -70,9 +70,11 @@ class Behavior():
                                                  avatar_url=newbot.avatar_url,
                                                  callback_url=newbot.callback_url) == False):
                     newbot.destroy()
+                    print ("SQL Validation error when creating bot")
                     return False
                 return True
             except groupy.api.errors.ApiError:
+                print ("groupy API Error when creating bot")
                 return False
         return False
 
@@ -186,22 +188,39 @@ class Behavior():
                     return mem
         return None
 
-    def releaseTheKraken(self):
-        ilya = self.getVictimFromGroupByVictimID("13598406", "boo")
-        ilya_success = self.botAssimilate(ilya.identification()['nickname'],
-         "boo",
-         "https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5",
-         settings.CALLBACK_URL + "/" + str(ilya.user_id))
-        
-        dorothy = self.getVictimFromGroupByVictimID("11545746", "boo")
-        dorothy_success = self.botAssimilate(dorothy.identification()['nickname'],
-         "boo",
-         "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8",
-         settings.CALLBACK_URL + "/" + str(dorothy.user_id))
+    '''
+    victimDict input is in format 
+    {
+        "victims" : [(victim_id, groupname, avatar_URL), (victim_id, groupname, avatar_URL), ...]
+    }
+    '''
+    def releaseTheKraken(self, victimDict):
+        foundFailure = False
+        #check if all victims in victimDict are valid
+        for (victimID, groupname, avatar_url) in victimDict['victims']:
+            victim = self.getVictimFromGroupByVictimID(victimID, groupname)
+            if (victim is None):
+                foundFailure = True
+                break
+        if (foundFailure):
+            print ("couldn't find victim")
+            return False
 
-        if (ilya_success and dorothy_success):
-            return True
-        return False
+        #delete any and all bots prior to creating new ones here
+        if (self.stowTheKraken() == False):
+            print ("couldn't preemptively stow the kraken")
+            return False
+
+        #start creating bots only at this point
+        for (victimID, groupname, avatar_url) in victimDict['victims']:
+            victim = self.getVictimFromGroupByVictimID(victimID, groupname)
+            if (self.botAssimilate(victim.identification()['nickname'],
+                groupname,
+                avatar_url,
+                settings.CALLBACK_URL + "/" + str(victim.user_id)) == False):
+                foundFailure = True
+                print ("couldn't botAssimilate")
+        return (not foundFailure)
 
     def stowTheKraken(self):
         foundFailure = False

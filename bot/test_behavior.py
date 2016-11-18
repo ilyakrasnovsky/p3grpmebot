@@ -123,7 +123,7 @@ class TestBehavior(TestCase):
 		#make the bot say something
 		ilyabot.post("Hi")
 		#use my destroy function to destroy ilyabot
-		myBehavior.destroyBot(ilyabot.name)
+		self.assertTrue(myBehavior.destroyBot(ilyabot.name))
 
 	'''NOT CURRENTLY SUPPORTED
 	def test_008_changeMe(self):
@@ -154,7 +154,7 @@ class TestBehavior(TestCase):
 		#fail to change a bot if victim name was wrong
 		self.assertFalse(myBehavior.botAdaptToNameChange("Dorothy Tang", ilya.identification()['nickname']))
 		#destroy the bot
-		myBehavior.destroyBot(ilyabot.name)
+		self.assertTrue(myBehavior.destroyBot(ilyabot.name))
 		
 		#make a bot to haunt Ilya Krasnovsky in boo
 		ilya = myBehavior.getVictimFromGroupByVictimID("13598406", "boo")
@@ -166,8 +166,11 @@ class TestBehavior(TestCase):
 		#successfuly change the bot to haunt Dorothy Tang
 		dorothy = myBehavior.getVictimFromGroupByVictimID("11545746", "boo")
 		self.assertTrue(myBehavior.botAdaptToNameChange(dorothy.identification()['nickname'], ilya.identification()['nickname']))
+		#this is a weird scenario : i turned ilyabot into dorothybot to make sure that
+		#if ilya (the victim) changes the name to dorothy, the bot can adapt
+		weird_dorothy_bot = myBehavior.getBot(myBehavior.getBotByVictimID("11545746").name)
 		#destroy the bot
-		myBehavior.destroyBot(ilyabot.name)
+		self.assertTrue(myBehavior.destroyBot(weird_dorothy_bot.name))
 
 	def test_010_botAdaptToAvatarChange(self):
 		myBehavior = Behavior()
@@ -185,7 +188,7 @@ class TestBehavior(TestCase):
 		self.assertFalse(myBehavior.botAdaptToAvatarChange("Dorothy Tang",
 			"https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"))
 		#destroy the bot
-		myBehavior.destroyBot(ilyabot.name)
+		self.assertTrue(myBehavior.destroyBot(ilyabot.name))
 		
 	def test_011_botBehave(self):
 		myBehavior = Behavior()
@@ -203,24 +206,28 @@ class TestBehavior(TestCase):
 		#fail to get a nonexistent bot to behave
 		self.assertFalse(myBehavior.botBehave("Dorothy Tang ", "How is the weather?"))
 		#destroy the bot
-		myBehavior.destroyBot(ilyabot.name)
+		self.assertTrue(myBehavior.destroyBot(ilyabot.name))
 
 	def test_012_releaseTheKraken(self):
 		myBehavior = Behavior()
 		#try releasing the kraken, make sure bots are properly created
-		self.assertTrue(myBehavior.releaseTheKraken())
-		#make sure you can't do this twice
-		self.assertFalse(myBehavior.releaseTheKraken())
+		victimDict = { "victims" : [("13598406", "boo", "https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5"),
+									("11545746", "boo", "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8")]
+					}
+		self.assertTrue(myBehavior.releaseTheKraken(victimDict))
 		#destroy the created bots
 		ilyabot = myBehavior.getBot(myBehavior.getBotByVictimID("13598406").name)
 		dorothybot = myBehavior.getBot(myBehavior.getBotByVictimID("11545746").name)
-		myBehavior.destroyBot(ilyabot.name)
-		myBehavior.destroyBot(dorothybot.name)
-		
+		self.assertTrue(myBehavior.destroyBot(ilyabot.name))
+		self.assertTrue(myBehavior.destroyBot(dorothybot.name))
+
 	def test_013_stowTheKraken(self):
 		myBehavior = Behavior()
 		#release the kraken first
-		myBehavior.releaseTheKraken()
+		victimDict = { "victims" : [("13598406", "boo", "https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5"),
+									("11545746", "boo", "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8")]
+					}
+		self.assertTrue(myBehavior.releaseTheKraken(victimDict))
 		#try stowing the kraken, make sure bots are properly deleted
 		self.assertTrue(myBehavior.stowTheKraken())
 
@@ -244,7 +251,7 @@ class TestBehavior(TestCase):
 		self.assertEqual(myBehavior.getBotByVictimID("13598406").name, ilya.identification()['nickname'] + " ")
 		#bot miss
 		self.assertIsNone(myBehavior.getBotByVictimID("3434343434"))
-		myBehavior.destroyBot(ilyabot.name)
+		self.assertTrue(myBehavior.destroyBot(ilyabot.name))
 
 	def test_016_getVictimFromGroupByVictimID(self):
 		myBehavior = Behavior()
@@ -259,4 +266,4 @@ class TestBehavior(TestCase):
 		self.assertEqual(myBehavior.getVictimFromGroupByVictimID("13598406", "Tests").identification()['nickname'], ilya.identification()['nickname'])
 		#victim miss
 		self.assertIsNone(myBehavior.getVictimFromGroupByVictimID("3434343434", "Tests"))
-		myBehavior.destroyBot(ilyabot.name)
+		self.assertTrue(myBehavior.destroyBot(ilyabot.name))
