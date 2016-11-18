@@ -230,6 +230,22 @@ class Behavior():
                 foundFailure = True
         return (not foundFailure)
 
+    def angerTheKraken(self):
+        foundFailure = False
+        allBots = groupMeBot.botmanager.all()
+        for bot in allBots:
+            if (not groupMeBot.botmanager.activateBot(bot.botID)):
+                foundFailure = True
+        return (not foundFailure)
+
+    def calmTheKraken(self):
+        foundFailure = False
+        allBots = groupMeBot.botmanager.all()
+        for bot in allBots:
+            if (not groupMeBot.botmanager.deActivateBot(bot.botID)):
+                foundFailure = True
+        return (not foundFailure)
+
 #Tester client
 def main():
     pass

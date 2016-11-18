@@ -18,6 +18,30 @@ class BotManager(models.Manager):
         except groupMeBot.DoesNotExist:
             return None
 
+    def activateBot(self, botID):
+        bot = self.getBotByID(botID)
+        if (bot is not None):
+            try:
+                bot.active = True
+                bot.full_clean()
+                bot.save()
+                return True
+            except ValidationError:
+                return False
+        return False
+
+    def deActivateBot(self, botID):
+        bot = self.getBotByID(botID)
+        if (bot is not None):
+            try:
+                bot.active = False
+                bot.full_clean()
+                bot.save()
+                return True
+            except ValidationError:
+                return False
+        return False
+
     def addBot(self, name, botID, victimID, groupname, avatar_url, callback_url):
         try:    
             bot = groupMeBot(name = name,
@@ -53,32 +77,33 @@ class BotManager(models.Manager):
 #inherits from Model
 #id field generated automatically, basically like SQL
 class groupMeBot(models.Model):
-	botID = models.TextField(unique=True)
-	name = models.TextField(unique=True) #shorter than textfield
-	victimID = models.IntegerField(unique=True)
-	groupname = models.TextField(default="Tests")
-	callback_url = models.URLField(default="https://www.google.com", validators=[URLValidator])
-	avatar_url = models.URLField(default="https://www.google.com", validators=[URLValidator])
+    botID = models.TextField(unique=True)
+    name = models.TextField(unique=True) #shorter than textfield
+    victimID = models.IntegerField(unique=True)
+    groupname = models.TextField(default="Tests")
+    callback_url = models.URLField(default="https://www.google.com", validators=[URLValidator])
+    avatar_url = models.URLField(default="https://www.google.com", validators=[URLValidator])
+    active = models.BooleanField(default=False)
 
-	botmanager = BotManager()
+    botmanager = BotManager()
 
-	#__str__ for python 3, __unicode__ for python 2
-	def __str__(self):
-		return self.name
+    #__str__ for python 3, __unicode__ for python 2
+    def __str__(self):
+        return self.name
 '''
 class groupMeMember(models.Model):
-	title = models.CharField(max_length=140) #shorter than textfield 
-	body = models.TextField()
-	date = models.DateTimeField()
-	def __str__(self):
-		return self.title
+    title = models.CharField(max_length=140) #shorter than textfield 
+    body = models.TextField()
+    date = models.DateTimeField()
+    def __str__(self):
+        return self.title
 '''
 
 '''
 class groupMeGroup(models.Model):
-	name = models.TextField(unique=True)  
-	groupid = models.TextField()
-	
-	def __str__(self):
-		return self.name
+    name = models.TextField(unique=True)  
+    groupid = models.TextField()
+    
+    def __str__(self):
+        return self.name
 '''

@@ -97,7 +97,32 @@ class TestModels(TestCase):
 		#bot miss
 		self.assertFalse(groupMeBot.botmanager.removeBotByID("fister_roboto_id"))
 	
-
+	def test_006_activateBot(self):
+		groupMeBot.botmanager.addBot(name="Dorothy Tang ",
+									 botID="dtang_bot_id",
+									 victimID=1234,
+									 groupname="Tests",
+									 avatar_url="https://www.google.com",
+									 callback_url="https://www.google.com")
+		self.assertEqual(groupMeBot.botmanager.getBotByID("dtang_bot_id").active, False)
+		self.assertTrue(groupMeBot.botmanager.activateBot("dtang_bot_id"))
+		self.assertEqual(groupMeBot.botmanager.getBotByID("dtang_bot_id").active, True)
+		self.assertTrue(groupMeBot.botmanager.removeBotByID("dtang_bot_id"))
+				
+	def test_007_deActivateBot(self):
+		groupMeBot.botmanager.addBot(name="Dorothy Tang ",
+									 botID="dtang_bot_id",
+									 victimID=1234,
+									 groupname="Tests",
+									 avatar_url="https://www.google.com",
+									 callback_url="https://www.google.com")
+		self.assertEqual(groupMeBot.botmanager.getBotByID("dtang_bot_id").active, False)
+		self.assertTrue(groupMeBot.botmanager.activateBot("dtang_bot_id"))
+		self.assertEqual(groupMeBot.botmanager.getBotByID("dtang_bot_id").active, True)
+		self.assertTrue(groupMeBot.botmanager.deActivateBot("dtang_bot_id"))
+		self.assertEqual(groupMeBot.botmanager.getBotByID("dtang_bot_id").active, False)		
+		self.assertTrue(groupMeBot.botmanager.removeBotByID("dtang_bot_id"))
+	
 
 
 	
