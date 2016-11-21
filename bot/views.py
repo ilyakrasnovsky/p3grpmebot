@@ -13,8 +13,8 @@ def index(request):
 
 def start_the_fun(request):
 	if (request.method == "GET"):
-		victimDict = { "victims" : [("13598406", "boo", "https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5"),
-                                    ("11545746", "boo", "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8")]
+		victimDict = { "victims" : [("11151463", "The Silver Pheasant", "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"),
+                                    ("13565728", "The Silver Pheasant", "https://i.groupme.com/1182x1080.png.d84d67f93a814167a5b27d3e18d61934")]
                     }
 		myBehavior = behavior.Behavior()
 		myBehavior.releaseTheKraken(victimDict)
