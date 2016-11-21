@@ -42,6 +42,18 @@ class BotManager(models.Manager):
                 return False
         return False
 
+    def changeBotGroupName(self, botID, groupname):
+        bot = self.getBotByID(botID)
+        if (bot is not None):
+            try:
+                bot.groupname = groupname
+                bot.full_clean()
+                bot.save()
+                return True
+            except ValidationError:
+                return False
+        return False
+
     def addBot(self, name, botID, victimID, groupname, avatar_url, callback_url):
         try:    
             bot = groupMeBot(name = name,

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from bot import dbmgr, behavior
+from bot.models import groupMeBot
 
 import json
 import groupy
@@ -12,14 +13,29 @@ def index(request):
 
 def start_the_fun(request):
 	if (request.method == "GET"):
+		victimDict = { "victims" : [("13598406", "boo", "https://i.groupme.com/748x496.jpeg.38929a8dc2db4a94880d42115dab34a5"),
+                                    ("11545746", "boo", "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8")]
+                    }
 		myBehavior = behavior.Behavior()
-		myBehavior.releaseTheKraken()
+		myBehavior.releaseTheKraken(victimDict)
 	return render(request, 'bot/home.html')			
 
 def end_the_fun(request):
 	if (request.method == "GET"):
 		myBehavior = behavior.Behavior()
 		myBehavior.stowTheKraken()
+	return render(request, 'bot/home.html')
+
+def activate_the_fun(request):
+	if (request.method == "GET"):
+		myBehavior = behavior.Behavior()
+		myBehavior.angerTheKraken()
+	return render(request, 'bot/home.html')
+
+def deactivate_the_fun(request):
+	if (request.method == "GET"):
+		myBehavior = behavior.Behavior()
+		myBehavior.calmTheKraken()
 	return render(request, 'bot/home.html')
 
 @csrf_exempt
@@ -40,6 +56,12 @@ def behave(request, victimID):
 					(oldVictimName, newVictimName) = re.split(" changed name to ", jsondata['text'])
 					myBehavior.botAdaptToNameChange(newVictimName, oldVictimName)
 				#TODO: IK, if the real bot victim changes their avatar, have the bot adapt
+				#bot's change their group name attributes in accordance with a group name change
+				if (re.search(" changed the group's name to ", jsondata['text']) is not None):
+					newGroupName = re.split(" changed the group's name to ", jsondata['text'])[1]
+					for bot in groupMeBot.botmanager.all():
+						#TODO: IK, handle bots across multiple groups
+						groupMeBot.botmanager.changeBotGroupName(bot.botID, newGroupName)
 			else:
 				#get the victim
 				victim = myBehavior.getVictimByID(victimID)
@@ -47,8 +69,9 @@ def behave(request, victimID):
 				#intended victim
 				if (myBehavior.getBot(jsondata['name']) is None
 					and jsondata['user_id'] != victimID):
-					#make the bot behave!
-					myBehavior.botBehave(myBehavior.getBotByVictimID(victimID).name, jsondata['text'])
+					#if bot is active, make the bot behave!
+					if (myBehavior.getBotByVictimID(victimID).active == True):
+						myBehavior.botBehave(myBehavior.getBotByVictimID(victimID).name, jsondata['text'])
 					
 		#Save the post to firebase
 		#myDbmgr1 = dbmgr.Dbmgr()
