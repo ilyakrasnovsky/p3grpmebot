@@ -16,7 +16,7 @@ def start_the_fun(request):
 		#victimDict = { "victims" : [("11151463", "The Silver Pheasant", "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8"),
         #                            ("13565728", "The Silver Pheasant", "https://i.groupme.com/1182x1080.png.d84d67f93a814167a5b27d3e18d61934")]
         #            }
-		victimDict = { "victims" : [("11151463", "The Silver Pheasant", "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8")}
+		victimDict = { "victims" : [("11151463", "The Silver Pheasant", "https://i.groupme.com/338bf1100147013161af2ee50beb8cc8")]}
 		
 		myBehavior = behavior.Behavior()
 		myBehavior.releaseTheKraken(victimDict)
