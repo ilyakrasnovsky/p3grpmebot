@@ -2,7 +2,7 @@
 Sets up secret keys for developing our 
 application locally on your machine. Run:
 
-$ python localcreds.py '<GROUPMEBOT_DJANGO_SECRET_KEY>' '<GROUPMEBOT_FIREBASE_SECRET_KEY>' '<GROUPMEBOT_GROUPME_SECRET_KEY>'
+$ python localcreds.py '<GROUPMEBOT_DJANGO_SECRET_KEY>' '<GROUPMEBOT_FIREBASE_SECRET_KEY>' '<GROUPMEBOT_GROUPME_SECRET_KEY> '<GROUPMEBOT_POSTGRES_SECRET_KEY>'
 
 to set it up (NOTE THE QUOTES!). This only needs to be done once.
 '''
