@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 from django.views.decorators.csrf import csrf_exempt
 from bot import dbmgr, behavior
 from bot.models import groupMeBot
+from time import sleep
 
 import json
 import groupy
@@ -75,6 +76,7 @@ def behave(request, victimID):
 					and jsondata['user_id'] != victimID):
 					#if bot is active, make the bot behave!
 					if (myBehavior.getBotByVictimID(victimID).active == True):
+						sleep(5)
 						myBehavior.botBehave(myBehavior.getBotByVictimID(victimID).name, jsondata['text'])
 					
 		#Save the post to firebase
