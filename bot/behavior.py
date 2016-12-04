@@ -168,7 +168,11 @@ class Behavior():
     def botBehave(self, name, message):
         bot = self.getBot(name)
         if (bot is not None):
-            response = self.cb.ask(message)
+            try:
+                response = self.cb.ask(message)
+            except IndexError:
+                print ("cleverbot API is being annoying")
+                response = "cleverbot API is being annoying"
             if (response is not None):
                 bot.post(response)
                 return True
